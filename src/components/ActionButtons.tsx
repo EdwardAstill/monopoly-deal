@@ -283,10 +283,50 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
               })
             }
           })
+        } else if (name === 'doubleRent') {
+          // When Double Rent is selected, show which rent cards it can combine with
+          const rentCards = player.hand.filter(c => c.type === 'rent')
+          if (rentCards.length > 0 && actionsRemaining >= 2) {
+            const playerColors2 = new Set(player.properties.map(s => s.color))
+            rentCards.forEach(rentCard => {
+              if (rentCard.type !== 'rent') return
+              rentCard.colors
+                .filter(color => playerColors2.has(color))
+                .forEach(color => {
+                  buttons.push(
+                    <button
+                      key={`dr-${rentCard.id}-${color}`}
+                      onClick={() =>
+                        onAction({
+                          type: 'playAction',
+                          cardId: rentCard.id,
+                          targetColor: color,
+                          doubleRentCardId: selectedCard.id,
+                        })
+                      }
+                      style={{ ...btnStyle, background: '#8B0000', border: '1px solid #f44' }}
+                    >
+                      ⚡ Double Rent: {color}
+                    </button>
+                  )
+                })
+            })
+          }
+          if (rentCards.length === 0 || actionsRemaining < 2) {
+            buttons.push(
+              <span key="dr-info" style={{ fontSize: 11, color: '#888', alignSelf: 'center' }}>
+                {actionsRemaining < 2 ? 'Need 2 actions for Double Rent' : 'No rent cards to combine with'}
+              </span>
+            )
+          }
         }
       } else if (selectedCard.type === 'rent') {
-        // Buttons per applicable color the player has properties in
         const playerColors = new Set(player.properties.map(s => s.color))
+        const doubleRentCard = player.hand.find(
+          c => c.type === 'action' && c.name === 'doubleRent' && c.id !== selectedCard.id
+        )
+        const canDouble = doubleRentCard && actionsRemaining >= 2
+
         selectedCard.colors
           .filter(color => playerColors.has(color))
           .forEach(color => {
@@ -305,6 +345,24 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
                 Charge Rent: {color}
               </button>
             )
+            if (canDouble) {
+              buttons.push(
+                <button
+                  key={`rent-double-${color}`}
+                  onClick={() =>
+                    onAction({
+                      type: 'playAction',
+                      cardId: selectedCard.id,
+                      targetColor: color,
+                      doubleRentCardId: doubleRentCard.id,
+                    })
+                  }
+                  style={{ ...btnStyle, background: '#8B0000', border: '1px solid #f44' }}
+                >
+                  ⚡ Double Rent: {color}
+                </button>
+              )
+            }
           })
       }
     }
