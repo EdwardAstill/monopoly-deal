@@ -315,6 +315,49 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
               })
             }
           })
+        } else if (name === 'forcedDeal') {
+          // Need to pick: one of your properties to give, one of opponent's (incomplete set) to take
+          const myCards = player.properties.flatMap(set =>
+            set.cards.map(c => ({ card: c, color: set.color }))
+          )
+          const oppCards = players[1].properties.flatMap(set => {
+            const isComplete = set.cards.length >= SET_SIZES[set.color] && set.cards.some(c => c.type === 'property')
+            if (isComplete) return []
+            return set.cards.map(c => ({ card: c, color: set.color }))
+          })
+          if (myCards.length === 0 || oppCards.length === 0) {
+            buttons.push(
+              <span key="fd-info" style={{ fontSize: 11, color: '#888', alignSelf: 'center' }}>
+                {myCards.length === 0 ? 'You need a property to offer' : 'No stealable opponent properties'}
+              </span>
+            )
+          } else {
+            // Show combos: for each opponent card, show buttons for each of your cards to offer
+            oppCards.forEach(({ card: oppCard, color: oppColor }) => {
+              const oppLabel = oppCard.type === 'property' ? oppCard.name : `${oppColor} wild`
+              myCards.forEach(({ card: myCard, color: myColor }) => {
+                const myLabel = myCard.type === 'property' ? myCard.name : `${myColor} wild`
+                buttons.push(
+                  <button
+                    key={`fd-${oppCard.id}-${myCard.id}`}
+                    onClick={() =>
+                      onAction({
+                        type: 'playAction',
+                        cardId: selectedCard.id,
+                        targetPlayer: 1,
+                        targetColor: oppColor,
+                        targetCardId: oppCard.id,
+                        offeredCardId: myCard.id,
+                      })
+                    }
+                    style={btnStyle}
+                  >
+                    Swap your {myLabel} for {oppLabel}
+                  </button>
+                )
+              })
+            })
+          }
         } else if (name === 'doubleRent') {
           // When Double Rent is selected, show which rent cards it can combine with
           const rentCards = player.hand.filter(c => c.type === 'rent')

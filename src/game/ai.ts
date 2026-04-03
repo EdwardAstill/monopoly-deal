@@ -22,7 +22,7 @@ function scoreAction(state: GameState, action: Action): number {
     const needed = setSize - currentCount
 
     // Don't play wilds onto sets with no natural property cards — waste of a wild
-    if (isWild && !hasNatural && (card?.type !== 'property')) {
+    if (isWild && !hasNatural) {
       return 5 // very low priority — only slightly better than pass
     }
 
