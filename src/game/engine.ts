@@ -119,9 +119,12 @@ export function createGame(): GameState {
 export function performDraw(state: GameState): GameState {
   if (state.phase !== 'draw') throw new Error('Not in draw phase')
   const s = ensureDeck(state)
-  const result = drawCards(s.deck, s.discardPile, 2)
+  const cp = s.currentPlayer
+  // Official rule: if hand is empty at start of turn, draw 5 instead of 2
+  const drawCount = s.players[cp].hand.length === 0 ? 5 : 2
+  const result = drawCards(s.deck, s.discardPile, drawCount)
   const players = clonePlayers(s.players)
-  players[s.currentPlayer].hand.push(...result.drawn)
+  players[cp].hand.push(...result.drawn)
 
   return {
     ...s,
