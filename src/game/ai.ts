@@ -16,9 +16,22 @@ function scoreAction(state: GameState, action: Action): number {
     const setSize = SET_SIZES[color]
     const existing = player.properties.find(s => s.color === color)
     const currentCount = existing ? existing.cards.length : 0
+    const hasNatural = existing ? existing.cards.some(c => c.type === 'property') : false
+    const card = player.hand.find(c => c.id === pa.cardId)
+    const isWild = card?.type === 'wild_property'
     const needed = setSize - currentCount
+
+    // Don't play wilds onto sets with no natural property cards — waste of a wild
+    if (isWild && !hasNatural && (card?.type !== 'property')) {
+      return 5 // very low priority — only slightly better than pass
+    }
+
     // playing this card will bring count to currentCount+1
-    if (needed === 1) return 100 // completes set
+    if (needed === 1) {
+      // Only truly completes if there's a natural card (or this card IS natural)
+      if (hasNatural || !isWild) return 100
+      return 5 // all-wild set doesn't count as complete
+    }
     if (needed === 2) return 60
     return 40
   }
