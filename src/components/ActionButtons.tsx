@@ -1,0 +1,320 @@
+import React, { useState } from 'react'
+import type { GameState, Action, Card, Color, PlayerState } from '../game/types'
+import { SET_SIZES } from '../game/constants'
+
+interface ActionButtonsProps {
+  state: GameState
+  selectedCardId: string | null
+  onAction: (action: Action) => void
+}
+
+interface RespondPanelProps {
+  state: GameState
+  onAction: (action: Action) => void
+}
+
+function RespondPanel({ state, onAction }: RespondPanelProps) {
+  const [selectedPayment, setSelectedPayment] = useState<string[]>([])
+  const player = state.players[0]
+  const pending = state.pendingAction!
+
+  const paymentCards: Card[] = [
+    ...player.bank,
+    ...player.properties.flatMap(set => set.cards),
+  ]
+
+  const hasJustSayNo = player.hand.some(
+    c => c.type === 'action' && c.name === 'justSayNo'
+  )
+
+  const toggleCard = (id: string) => {
+    setSelectedPayment(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    )
+  }
+
+  const payTotal = paymentCards
+    .filter(c => selectedPayment.includes(c.id))
+    .reduce((sum, c) => sum + c.value, 0)
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div style={{ color: '#f8c', fontWeight: 'bold' }}>
+        Respond to {pending.type}
+        {pending.amount != null ? ` ($${pending.amount})` : ''}
+      </div>
+      <div style={{ fontSize: 11, color: '#aaa' }}>Select cards to pay:</div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+        {paymentCards.map(card => (
+          <button
+            key={card.id}
+            onClick={() => toggleCard(card.id)}
+            style={{
+              padding: '2px 6px',
+              fontSize: 11,
+              background: selectedPayment.includes(card.id) ? '#555' : '#333',
+              color: '#eee',
+              border: selectedPayment.includes(card.id) ? '1px solid #8cf' : '1px solid #555',
+              borderRadius: 4,
+              cursor: 'pointer',
+            }}
+          >
+            ${card.value}{' '}
+            {card.type === 'property'
+              ? card.name
+              : card.type === 'wild_property'
+              ? 'Wild'
+              : `$${card.value}`}
+          </button>
+        ))}
+      </div>
+      <div style={{ fontSize: 11, color: '#aaa' }}>Pay total: ${payTotal}</div>
+      <div style={{ display: 'flex', gap: 6 }}>
+        <button
+          onClick={() =>
+            onAction({ type: 'respond', accept: true, paymentCardIds: selectedPayment })
+          }
+          style={btnStyle}
+        >
+          Pay
+        </button>
+        {hasJustSayNo && (
+          <button
+            onClick={() => onAction({ type: 'respond', accept: false })}
+            style={{ ...btnStyle, background: '#8B0000' }}
+          >
+            Just Say No!
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+const btnStyle: React.CSSProperties = {
+  padding: '4px 10px',
+  fontSize: 12,
+  background: '#333',
+  color: '#eee',
+  border: '1px solid #555',
+  borderRadius: 4,
+  cursor: 'pointer',
+}
+
+export default function ActionButtons({ state, selectedCardId, onAction }: ActionButtonsProps) {
+  const { phase, currentPlayer, actionsRemaining, pendingAction, players } = state
+  const player = players[0]
+
+  // Discard phase
+  if (phase === 'discard') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div style={{ color: '#f8c', fontSize: 12 }}>
+          Too many cards! Discard down to 7.
+        </div>
+        {selectedCardId && (
+          <button
+            onClick={() => onAction({ type: 'discard', cardId: selectedCardId })}
+            style={btnStyle}
+          >
+            Discard Selected
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  // Respond phase targeting player 0
+  if (phase === 'respond' && pendingAction?.targetPlayer === 0) {
+    return <RespondPanel state={state} onAction={onAction} />
+  }
+
+  // Action phase, player 0's turn
+  if (phase === 'action' && currentPlayer === 0) {
+    const selectedCard = selectedCardId
+      ? player.hand.find(c => c.id === selectedCardId) ?? null
+      : null
+
+    const buttons: React.ReactNode[] = []
+
+    // Always: Bank + End Turn
+    if (selectedCard) {
+      buttons.push(
+        <button
+          key="bank"
+          onClick={() => onAction({ type: 'bankCard', cardId: selectedCard.id })}
+          style={btnStyle}
+        >
+          Bank (${selectedCard.value})
+        </button>
+      )
+    }
+
+    buttons.push(
+      <button
+        key="endTurn"
+        onClick={() => onAction({ type: 'pass' })}
+        style={btnStyle}
+      >
+        End Turn ({actionsRemaining} remaining)
+      </button>
+    )
+
+    if (selectedCard) {
+      if (selectedCard.type === 'property') {
+        buttons.push(
+          <button
+            key="play-prop"
+            onClick={() =>
+              onAction({
+                type: 'playProperty',
+                cardId: selectedCard.id,
+                targetColor: selectedCard.color,
+              })
+            }
+            style={btnStyle}
+          >
+            Play as Property ({selectedCard.color})
+          </button>
+        )
+      } else if (selectedCard.type === 'wild_property') {
+        selectedCard.colors.forEach(color => {
+          buttons.push(
+            <button
+              key={`play-wild-${color}`}
+              onClick={() =>
+                onAction({
+                  type: 'playProperty',
+                  cardId: selectedCard.id,
+                  targetColor: color,
+                })
+              }
+              style={btnStyle}
+            >
+              Play as {color}
+            </button>
+          )
+        })
+      } else if (selectedCard.type === 'action') {
+        const name = selectedCard.name
+        if (name === 'passGo') {
+          buttons.push(
+            <button
+              key="passGo"
+              onClick={() => onAction({ type: 'playAction', cardId: selectedCard.id })}
+              style={btnStyle}
+            >
+              Play Pass Go
+            </button>
+          )
+        } else if (name === 'debtCollector') {
+          buttons.push(
+            <button
+              key="debtCollector"
+              onClick={() =>
+                onAction({
+                  type: 'playAction',
+                  cardId: selectedCard.id,
+                  targetPlayer: 1,
+                })
+              }
+              style={btnStyle}
+            >
+              Debt Collector (target AI)
+            </button>
+          )
+        } else if (name === 'itsMyBirthday') {
+          buttons.push(
+            <button
+              key="birthday"
+              onClick={() => onAction({ type: 'playAction', cardId: selectedCard.id })}
+              style={btnStyle}
+            >
+              It's My Birthday!
+            </button>
+          )
+        } else if (name === 'dealBreaker') {
+          // Buttons per opponent complete set
+          players[1].properties.forEach(set => {
+            const isComplete = set.cards.length >= SET_SIZES[set.color]
+            if (isComplete) {
+              buttons.push(
+                <button
+                  key={`dealBreaker-${set.color}`}
+                  onClick={() =>
+                    onAction({
+                      type: 'playAction',
+                      cardId: selectedCard.id,
+                      targetPlayer: 1,
+                      targetColor: set.color,
+                    })
+                  }
+                  style={btnStyle}
+                >
+                  Deal Breaker: AI's {set.color} set
+                </button>
+              )
+            }
+          })
+        } else if (name === 'slyDeal') {
+          // Buttons per opponent incomplete set card
+          players[1].properties.forEach(set => {
+            const isComplete = set.cards.length >= SET_SIZES[set.color]
+            if (!isComplete) {
+              set.cards.forEach(card => {
+                buttons.push(
+                  <button
+                    key={`slyDeal-${card.id}`}
+                    onClick={() =>
+                      onAction({
+                        type: 'playAction',
+                        cardId: selectedCard.id,
+                        targetPlayer: 1,
+                        targetColor: set.color,
+                        targetCardId: card.id,
+                      })
+                    }
+                    style={btnStyle}
+                  >
+                    Sly Deal:{' '}
+                    {card.type === 'property' ? card.name : `${set.color} wild`}
+                  </button>
+                )
+              })
+            }
+          })
+        }
+      } else if (selectedCard.type === 'rent') {
+        // Buttons per applicable color the player has properties in
+        const playerColors = new Set(player.properties.map(s => s.color))
+        selectedCard.colors
+          .filter(color => playerColors.has(color))
+          .forEach(color => {
+            buttons.push(
+              <button
+                key={`rent-${color}`}
+                onClick={() =>
+                  onAction({
+                    type: 'playAction',
+                    cardId: selectedCard.id,
+                    targetColor: color,
+                  })
+                }
+                style={btnStyle}
+              >
+                Charge Rent: {color}
+              </button>
+            )
+          })
+      }
+    }
+
+    return (
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {buttons}
+      </div>
+    )
+  }
+
+  return null
+}
