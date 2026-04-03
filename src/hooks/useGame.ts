@@ -7,11 +7,14 @@ type GameAction =
   | { type: 'PLAYER_ACTION'; action: Action }
   | { type: 'AI_STEP' }
   | { type: 'NEW_GAME' }
+  | { type: 'DRAW' }
 
 function gameReducer(state: GameState, gameAction: GameAction): GameState {
   switch (gameAction.type) {
     case 'NEW_GAME':
       return createGame()
+    case 'DRAW':
+      return state.phase === 'draw' ? performDraw(state) : state
     case 'PLAYER_ACTION':
       return applyAction(state, gameAction.action)
     case 'AI_STEP': {
@@ -54,7 +57,7 @@ export function useGame() {
   // Auto-draw for human player at start of turn
   useEffect(() => {
     if (state.phase === 'draw' && state.currentPlayer === 0) {
-      dispatch({ type: 'PLAYER_ACTION', action: { type: 'pass' } })
+      dispatch({ type: 'DRAW' })
     }
   }, [state.phase, state.currentPlayer])
 
