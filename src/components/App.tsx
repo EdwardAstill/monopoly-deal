@@ -1,5 +1,5 @@
 import { useGame } from '../hooks/useGame'
-import { Board } from './Board'
+import Board from './Board'
 
 export function App() {
   const { state, playerAction, newGame } = useGame()

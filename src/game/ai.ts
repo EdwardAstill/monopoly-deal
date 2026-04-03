@@ -1,4 +1,4 @@
-import type { GameState, Action, RespondAction, Card, PlayerIndex, ActionCard, PlayPropertyAction, PlayActionAction } from './types'
+import type { GameState, Action, RespondAction, Card, ActionCard, PlayPropertyAction, PlayActionAction } from './types'
 import { SET_SIZES, RENT_VALUES } from './constants'
 import { getValidActions } from './engine'
 

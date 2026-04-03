@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import type { GameState, Action, Card, Color, PlayerState } from '../game/types'
+import { useState } from 'react'
+import type { GameState, Action, Card } from '../game/types'
 import { SET_SIZES } from '../game/constants'
 
 interface ActionButtonsProps {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import type { GameState, Action } from '../game/types'
 import OpponentView from './OpponentView'
 import PropertyArea from './PropertyArea'
@@ -85,7 +85,7 @@ export default function Board({ state, onAction }: BoardProps) {
           }}
         >
           <PropertyArea properties={player.properties} />
-          <Bank bank={player.bank} />
+          <Bank cards={player.bank} />
           <ActionButtons
             state={state}
             selectedCardId={selectedCardId}
