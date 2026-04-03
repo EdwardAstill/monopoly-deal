@@ -10,38 +10,69 @@ interface CardViewProps {
   small?: boolean
 }
 
-const ACTION_DISPLAY_NAMES: Record<string, string> = {
-  dealBreaker: 'Deal Breaker',
-  justSayNo: 'Just Say No',
-  slyDeal: 'Sly Deal',
-  forcedDeal: 'Forced Deal',
-  debtCollector: 'Debt Collector',
-  itsMyBirthday: "It's My Birthday",
-  passGo: 'Pass Go',
-  house: 'House',
-  hotel: 'Hotel',
-  doubleRent: 'Double Rent',
+const ACTION_INFO: Record<string, { label: string; icon: string }> = {
+  dealBreaker: { label: 'Deal Breaker', icon: '💥' },
+  justSayNo: { label: 'Just Say No', icon: '🚫' },
+  slyDeal: { label: 'Sly Deal', icon: '🤫' },
+  forcedDeal: { label: 'Forced Deal', icon: '🔄' },
+  debtCollector: { label: 'Debt Collector', icon: '💰' },
+  itsMyBirthday: { label: "It's My Birthday", icon: '🎂' },
+  passGo: { label: 'Pass Go', icon: '▶️' },
+  house: { label: 'House', icon: '🏠' },
+  hotel: { label: 'Hotel', icon: '🏨' },
+  doubleRent: { label: 'Double Rent', icon: '⚡' },
+}
+
+const CARD_ICON: Record<string, string> = {
+  money: '💵',
+  property: '🏘️',
+  wild_property: '🌈',
+  rent: '📋',
 }
 
 function getBackground(card: Card): string {
-  if (card.type === 'property') {
-    return COLOR_DISPLAY[card.color].hex
-  }
+  if (card.type === 'property') return COLOR_DISPLAY[card.color].hex
   if (card.type === 'wild_property') {
-    if (card.colors.length > 2) return '#FFD700'
-    return COLOR_DISPLAY[card.colors[0]].hex
+    if (card.colors.length > 2) return 'linear-gradient(135deg, #FF6347, #FFD700, #228B22, #0000CD)'
+    return `linear-gradient(135deg, ${COLOR_DISPLAY[card.colors[0]].hex}, ${COLOR_DISPLAY[card.colors[1]].hex})`
   }
   if (card.type === 'money') return '#85BB65'
-  if (card.type === 'rent') return '#FF6347'
+  if (card.type === 'rent') {
+    if (card.colors.length > 2) return 'linear-gradient(135deg, #FF6347, #FF8C00)'
+    return `linear-gradient(135deg, ${COLOR_DISPLAY[card.colors[0]].hex}, ${COLOR_DISPLAY[card.colors[1]].hex})`
+  }
+  if (card.type === 'action') return '#4a4a6a'
   return '#DDD'
+}
+
+function getIcon(card: Card, small: boolean): string {
+  if (card.type === 'action') return small ? '' : (ACTION_INFO[card.name]?.icon ?? '')
+  return small ? '' : (CARD_ICON[card.type] ?? '')
 }
 
 function getTitle(card: Card): string {
   if (card.type === 'property') return card.name
   if (card.type === 'money') return `$${card.value}M`
-  if (card.type === 'action') return ACTION_DISPLAY_NAMES[card.name] ?? card.name
-  if (card.type === 'rent') return card.colors.map(c => COLOR_DISPLAY[c].label).join('/')
-  if (card.type === 'wild_property') return 'Wild'
+  if (card.type === 'action') return ACTION_INFO[card.name]?.label ?? card.name
+  if (card.type === 'rent') {
+    if (card.colors.length > 2) return 'Rent (Any)'
+    return `Rent`
+  }
+  if (card.type === 'wild_property') {
+    if (card.colors.length > 2) return 'Wild'
+    return `Wild`
+  }
+  return ''
+}
+
+function getSubtitle(card: Card): string {
+  if (card.type === 'rent' && card.colors.length <= 2) {
+    return card.colors.map(c => COLOR_DISPLAY[c].label).join(' / ')
+  }
+  if (card.type === 'wild_property' && card.colors.length <= 2) {
+    return card.colors.map(c => COLOR_DISPLAY[c].label).join(' / ')
+  }
+  if (card.type === 'property') return COLOR_DISPLAY[card.color].label
   return ''
 }
 
@@ -96,14 +127,24 @@ export default function CardView({ card, onClick, selected, faceDown, small }: C
 
   const bg = getBackground(card)
   const title = getTitle(card)
-  const value = card.type === 'wild_property' && card.value === 0 ? null : `$${card.value}m`
+  const subtitle = getSubtitle(card)
+  const icon = getIcon(card, !!small)
+  const value = card.type === 'wild_property' && card.value === 0 ? null : `$${card.value}M`
 
   return (
     <div
       style={{ ...baseStyle, background: bg }}
       onClick={onClick}
     >
-      <span style={textStyle}>{title}</span>
+      <div>
+        {icon && <div style={{ fontSize: small ? 12 : 20, lineHeight: 1 }}>{icon}</div>}
+        <span style={textStyle}>{title}</span>
+        {subtitle && (
+          <div style={{ ...textStyle, fontWeight: 'normal', fontSize: small ? 6 : 8, opacity: 0.85, marginTop: 1 }}>
+            {subtitle}
+          </div>
+        )}
+      </div>
       {value && (
         <span style={{ ...textStyle, alignSelf: 'flex-end', fontSize: small ? 7 : 9 }}>
           {value}
