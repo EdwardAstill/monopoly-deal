@@ -65,7 +65,23 @@ function getTitle(card: Card): string {
   return ''
 }
 
+const ACTION_SUBTITLE: Record<string, string> = {
+  justSayNo: 'Cancels any action against you',
+  dealBreaker: 'Steal a complete set',
+  slyDeal: 'Steal 1 property',
+  forcedDeal: 'Swap a property',
+  debtCollector: 'Collect $5M',
+  itsMyBirthday: 'Collect $2M',
+  passGo: 'Draw 2 cards',
+  house: '+$3M rent',
+  hotel: '+$4M rent',
+  doubleRent: '2x rent amount',
+}
+
 function getSubtitle(card: Card): string {
+  if (card.type === 'action') {
+    return ACTION_SUBTITLE[card.name] ?? ''
+  }
   if (card.type === 'rent' && card.colors.length <= 2) {
     return card.colors.map(c => COLOR_DISPLAY[c].label).join(' / ')
   }
