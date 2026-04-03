@@ -178,7 +178,39 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
           </button>
         )
       } else if (selectedCard.type === 'wild_property') {
-        selectedCard.colors.forEach(color => {
+        const existingColors = player.properties.map(s => s.color)
+        const available = selectedCard.colors
+        // Show existing set colors first, then remaining
+        const inSets = available.filter(c => existingColors.includes(c))
+        const newColors = available.filter(c => !existingColors.includes(c))
+
+        if (inSets.length > 0) {
+          inSets.forEach(color => {
+            const set = player.properties.find(s => s.color === color)
+            const count = set ? set.cards.length : 0
+            const needed = SET_SIZES[color]
+            buttons.push(
+              <button
+                key={`play-wild-${color}`}
+                onClick={() =>
+                  onAction({
+                    type: 'playProperty',
+                    cardId: selectedCard.id,
+                    targetColor: color,
+                  })
+                }
+                style={{
+                  ...btnStyle,
+                  background: count + 1 >= needed ? '#2a6a2a' : '#333',
+                  border: count + 1 >= needed ? '1px solid #4f4' : '1px solid #555',
+                }}
+              >
+                Add to {color} ({count}/{needed})
+              </button>
+            )
+          })
+        }
+        newColors.forEach(color => {
           buttons.push(
             <button
               key={`play-wild-${color}`}
@@ -191,7 +223,7 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
               }
               style={btnStyle}
             >
-              Play as {color}
+              Start new {color}
             </button>
           )
         })
