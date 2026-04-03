@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { GameState, Action, Card } from '../game/types'
+import type { GameState, Action, Card, Color } from '../game/types'
 import { SET_SIZES } from '../game/constants'
 
 interface ActionButtonsProps {
@@ -91,6 +91,130 @@ function RespondPanel({ state, onAction }: RespondPanelProps) {
   )
 }
 
+interface ForcedDealModalProps {
+  state: GameState
+  cardId: string
+  onAction: (action: Action) => void
+  onCancel: () => void
+}
+
+function ForcedDealModal({ state, cardId, onAction, onCancel }: ForcedDealModalProps) {
+  const [takeCard, setTakeCard] = useState<{ id: string; color: Color } | null>(null)
+  const player = state.players[0]
+
+  const oppCards = state.players[1].properties.flatMap(set => {
+    const isComplete = set.cards.length >= SET_SIZES[set.color] && set.cards.some(c => c.type === 'property')
+    if (isComplete) return []
+    return set.cards.map(c => ({ card: c, color: set.color }))
+  })
+
+  const myCards = player.properties.flatMap(set =>
+    set.cards.map(c => ({ card: c, color: set.color }))
+  )
+
+  const labelFor = (card: Card, color: string) =>
+    card.type === 'property' ? card.name : `${color} Wild`
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100,
+    }} onClick={onCancel}>
+      <div style={{
+        background: '#1e1e3a', border: '1px solid #555', borderRadius: 10,
+        padding: 20, minWidth: 320, maxWidth: 460,
+      }} onClick={e => e.stopPropagation()}>
+        <h3 style={{ margin: '0 0 12px', fontSize: 16 }}>Forced Deal</h3>
+
+        {/* Step 1: Pick what to take */}
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 12, color: '#aaa', marginBottom: 6 }}>
+            {!takeCard ? '1. Pick a card to take from opponent:' : '2. Pick a card to give in exchange:'}
+          </div>
+
+          {!takeCard && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {oppCards.length === 0 && (
+                <span style={{ fontSize: 11, color: '#888' }}>No stealable properties</span>
+              )}
+              {oppCards.map(({ card, color }) => (
+                <button
+                  key={card.id}
+                  onClick={() => setTakeCard({ id: card.id, color })}
+                  style={{
+                    padding: '6px 10px', fontSize: 11, background: '#2a2a4a',
+                    color: '#eee', border: '1px solid #666', borderRadius: 4, cursor: 'pointer',
+                  }}
+                >
+                  {labelFor(card, color)}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Step 2: Pick what to give */}
+          {takeCard && (
+            <>
+              <div style={{
+                fontSize: 12, color: '#8cf', marginBottom: 8, padding: '4px 8px',
+                background: 'rgba(136,204,255,0.1)', borderRadius: 4,
+              }}>
+                Taking: {labelFor(
+                  oppCards.find(c => c.card.id === takeCard.id)?.card ?? {} as Card,
+                  takeCard.color
+                )}
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {myCards.length === 0 && (
+                  <span style={{ fontSize: 11, color: '#888' }}>You have no properties to offer</span>
+                )}
+                {myCards.map(({ card, color }) => (
+                  <button
+                    key={card.id}
+                    onClick={() =>
+                      onAction({
+                        type: 'playAction',
+                        cardId,
+                        targetPlayer: 1,
+                        targetColor: takeCard.color,
+                        targetCardId: takeCard.id,
+                        offeredCardId: card.id,
+                      })
+                    }
+                    style={{
+                      padding: '6px 10px', fontSize: 11, background: '#2a2a4a',
+                      color: '#eee', border: '1px solid #666', borderRadius: 4, cursor: 'pointer',
+                    }}
+                  >
+                    {labelFor(card, color)}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+          {takeCard && (
+            <button onClick={() => setTakeCard(null)} style={{
+              padding: '6px 12px', fontSize: 12, background: '#333',
+              color: '#eee', border: '1px solid #555', borderRadius: 4, cursor: 'pointer',
+            }}>
+              Back
+            </button>
+          )}
+          <button onClick={onCancel} style={{
+            padding: '6px 12px', fontSize: 12, background: '#333',
+            color: '#eee', border: '1px solid #555', borderRadius: 4, cursor: 'pointer',
+          }}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const btnStyle: React.CSSProperties = {
   padding: '4px 10px',
   fontSize: 12,
@@ -102,6 +226,7 @@ const btnStyle: React.CSSProperties = {
 }
 
 export default function ActionButtons({ state, selectedCardId, onAction }: ActionButtonsProps) {
+  const [showForcedDeal, setShowForcedDeal] = useState(false)
   const { phase, currentPlayer, actionsRemaining, pendingAction, players } = state
   const player = players[0]
 
@@ -316,48 +441,15 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
             }
           })
         } else if (name === 'forcedDeal') {
-          // Need to pick: one of your properties to give, one of opponent's (incomplete set) to take
-          const myCards = player.properties.flatMap(set =>
-            set.cards.map(c => ({ card: c, color: set.color }))
+          buttons.push(
+            <button
+              key="forcedDeal"
+              onClick={() => setShowForcedDeal(true)}
+              style={btnStyle}
+            >
+              Play Forced Deal
+            </button>
           )
-          const oppCards = players[1].properties.flatMap(set => {
-            const isComplete = set.cards.length >= SET_SIZES[set.color] && set.cards.some(c => c.type === 'property')
-            if (isComplete) return []
-            return set.cards.map(c => ({ card: c, color: set.color }))
-          })
-          if (myCards.length === 0 || oppCards.length === 0) {
-            buttons.push(
-              <span key="fd-info" style={{ fontSize: 11, color: '#888', alignSelf: 'center' }}>
-                {myCards.length === 0 ? 'You need a property to offer' : 'No stealable opponent properties'}
-              </span>
-            )
-          } else {
-            // Show combos: for each opponent card, show buttons for each of your cards to offer
-            oppCards.forEach(({ card: oppCard, color: oppColor }) => {
-              const oppLabel = oppCard.type === 'property' ? oppCard.name : `${oppColor} wild`
-              myCards.forEach(({ card: myCard, color: myColor }) => {
-                const myLabel = myCard.type === 'property' ? myCard.name : `${myColor} wild`
-                buttons.push(
-                  <button
-                    key={`fd-${oppCard.id}-${myCard.id}`}
-                    onClick={() =>
-                      onAction({
-                        type: 'playAction',
-                        cardId: selectedCard.id,
-                        targetPlayer: 1,
-                        targetColor: oppColor,
-                        targetCardId: oppCard.id,
-                        offeredCardId: myCard.id,
-                      })
-                    }
-                    style={btnStyle}
-                  >
-                    Swap your {myLabel} for {oppLabel}
-                  </button>
-                )
-              })
-            })
-          }
         } else if (name === 'doubleRent') {
           // When Double Rent is selected, show which rent cards it can combine with
           const rentCards = player.hand.filter(c => c.type === 'rent')
@@ -442,10 +534,25 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
       }
     }
 
+    const handleForcedDealAction = (action: Action) => {
+      setShowForcedDeal(false)
+      onAction(action)
+    }
+
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-        {buttons}
-      </div>
+      <>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {buttons}
+        </div>
+        {showForcedDeal && selectedCard && (
+          <ForcedDealModal
+            state={state}
+            cardId={selectedCard.id}
+            onAction={handleForcedDealAction}
+            onCancel={() => setShowForcedDeal(false)}
+          />
+        )}
+      </>
     )
   }
 
