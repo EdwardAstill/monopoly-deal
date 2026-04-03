@@ -18,7 +18,9 @@ function removeCard(cards: Card[], cardId: string): { card: Card; remaining: Car
 }
 
 function isSetComplete(set: PropertySet): boolean {
-  return set.cards.length >= SET_SIZES[set.color]
+  if (set.cards.length < SET_SIZES[set.color]) return false
+  // A complete set must have at least one natural (non-wild) property card
+  return set.cards.some(c => c.type === 'property')
 }
 
 function countCompleteSets(properties: PropertySet[]): number {

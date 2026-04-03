@@ -21,7 +21,8 @@ export default function PropertyArea({ properties, small }: PropertyAreaProps) {
     <div style={{ display: 'flex', flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
       {properties.map(set => {
         const required = SET_SIZES[set.color]
-        const complete = set.cards.length >= required
+        const hasNatural = set.cards.some(c => c.type === 'property')
+        const complete = set.cards.length >= required && hasNatural
         const rent = getRentAmount(set)
         return (
           <div
