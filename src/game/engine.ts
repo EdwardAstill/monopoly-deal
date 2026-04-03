@@ -4,10 +4,38 @@ import type {
   Action, PendingAction, PlayPropertyAction, PlayActionAction,
   BankCardAction, DiscardAction, RespondAction,
 } from './types'
-import { SET_SIZES, RENT_VALUES } from './constants'
+import { SET_SIZES, RENT_VALUES, COLOR_DISPLAY } from './constants'
 import { createDeck, shuffle, drawCards } from './deck'
 
 // ── Helpers ──
+
+const ACTION_NAMES: Record<string, string> = {
+  dealBreaker: 'Deal Breaker', justSayNo: 'Just Say No', slyDeal: 'Sly Deal',
+  forcedDeal: 'Forced Deal', debtCollector: 'Debt Collector',
+  itsMyBirthday: "It's My Birthday", passGo: 'Pass Go',
+  house: 'House', hotel: 'Hotel', doubleRent: 'Double Rent',
+}
+
+function cardName(card: Card): string {
+  if (card.type === 'property') return (card as PropertyCard).name
+  if (card.type === 'wild_property') {
+    const wc = card as WildPropertyCard
+    if (wc.colors.length > 2) return 'Rainbow Wild'
+    return `${COLOR_DISPLAY[wc.colors[0]].label}/${COLOR_DISPLAY[wc.colors[1]].label} Wild`
+  }
+  if (card.type === 'money') return `$${card.value}M`
+  if (card.type === 'action') return ACTION_NAMES[(card as ActionCard).name] ?? (card as ActionCard).name
+  if (card.type === 'rent') {
+    const rc = card as RentCard
+    if (rc.colors.length > 2) return 'Wild Rent'
+    return `${COLOR_DISPLAY[rc.colors[0]].label}/${COLOR_DISPLAY[rc.colors[1]].label} Rent`
+  }
+  return 'card'
+}
+
+function colorLabel(color: Color): string {
+  return COLOR_DISPLAY[color].label
+}
 
 function removeCard(cards: Card[], cardId: string): { card: Card; remaining: Card[] } {
   const idx = cards.findIndex(c => c.id === cardId)
@@ -212,7 +240,7 @@ function applyPlayProperty(state: GameState, action: PlayPropertyAction): GameSt
     ...state,
     players,
     actionsRemaining: state.actionsRemaining - 1,
-    log: [...state.log, { player: cp, message: `Played property to ${action.targetColor}` }],
+    log: [...state.log, { player: cp, message: `Played ${cardName(card)} to ${colorLabel(action.targetColor)}` }],
   }
   return withWinCheck(maybeEndTurn(next))
 }
@@ -229,7 +257,7 @@ function applyBankCard(state: GameState, action: BankCardAction): GameState {
     ...state,
     players,
     actionsRemaining: state.actionsRemaining - 1,
-    log: [...state.log, { player: cp, message: `Banked card worth ${card.value}M` }],
+    log: [...state.log, { player: cp, message: `Banked ${cardName(card)} ($${card.value}M)` }],
   }
   return maybeEndTurn(next)
 }
@@ -250,7 +278,7 @@ function applyDiscard(state: GameState, action: DiscardAction): GameState {
     ...state,
     players,
     discardPile: [...state.discardPile, card],
-    log: [...state.log, { player: cp, message: `Discarded a card` }],
+    log: [...state.log, { player: cp, message: `Discarded ${cardName(card)}` }],
   }
 
   if (players[cp].hand.length <= 7) {
@@ -315,7 +343,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
       actionsRemaining,
       phase: 'respond',
       pendingAction: pending,
-      log: [...state.log, { player: cp, message: `Charged ${amount}M rent for ${color}` }],
+      log: [...state.log, { player: cp, message: `Charged $${amount}M rent on ${colorLabel(color)}${doubleMultiplier > 1 ? ' (doubled!)' : ''}` }],
     }
   }
 
@@ -331,7 +359,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         discardPile: drawResult.discardPile,
         players,
         actionsRemaining,
-        log: [...state.log, { player: cp, message: `Played Pass Go, drew 2 cards` }],
+        log: [...state.log, { player: cp, message: `Played Pass Go — drew 2 cards` }],
       }
       return maybeEndTurn(next)
     }
@@ -351,7 +379,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         actionsRemaining,
         phase: 'respond',
         pendingAction: pending,
-        log: [...state.log, { player: cp, message: `Played Debt Collector on Player ${target}` }],
+        log: [...state.log, { player: cp, message: `Played Debt Collector — demanding $5M` }],
       }
     }
 
@@ -370,7 +398,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         actionsRemaining,
         phase: 'respond',
         pendingAction: pending,
-        log: [...state.log, { player: cp, message: `Played It's My Birthday` }],
+        log: [...state.log, { player: cp, message: `Played It's My Birthday — collecting $2M` }],
       }
     }
 
@@ -389,7 +417,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         actionsRemaining,
         phase: 'respond',
         pendingAction: pending,
-        log: [...state.log, { player: cp, message: `Played Sly Deal` }],
+        log: [...state.log, { player: cp, message: `Played Sly Deal — targeting a property` }],
       }
     }
 
@@ -409,7 +437,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         actionsRemaining,
         phase: 'respond',
         pendingAction: pending,
-        log: [...state.log, { player: cp, message: `Played Forced Deal` }],
+        log: [...state.log, { player: cp, message: `Played Forced Deal — proposing a swap` }],
       }
     }
 
@@ -428,7 +456,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         actionsRemaining,
         phase: 'respond',
         pendingAction: pending,
-        log: [...state.log, { player: cp, message: `Played Deal Breaker on ${action.targetColor}` }],
+        log: [...state.log, { player: cp, message: `Played Deal Breaker on ${colorLabel(action.targetColor!)} set!` }],
       }
     }
 
@@ -450,7 +478,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         discardPile: newDiscardPile,
         players,
         actionsRemaining,
-        log: [...state.log, { player: cp, message: `Added house to ${color}` }],
+        log: [...state.log, { player: cp, message: `Added House to ${colorLabel(color)} (+$3M rent)` }],
       }
       return maybeEndTurn(next)
     }
@@ -471,7 +499,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         discardPile: newDiscardPile,
         players,
         actionsRemaining,
-        log: [...state.log, { player: cp, message: `Added hotel to ${color}` }],
+        log: [...state.log, { player: cp, message: `Added Hotel to ${colorLabel(color)} (+$4M rent)` }],
       }
       return maybeEndTurn(next)
     }
@@ -520,7 +548,7 @@ function applyRespond(state: GameState, action: RespondAction): GameState {
       players,
       discardPile: [...state.discardPile, jsnCard],
       pendingAction: counterPending,
-      log: [...state.log, { player: pending.targetPlayer, message: `Played Just Say No!` }],
+      log: [...state.log, { player: pending.targetPlayer, message: `Played Just Say No! Blocked the ${pending.type}` }],
     }
   }
 
@@ -629,12 +657,21 @@ function resolveAccept(
     }
   }
 
+  const resolveMessages: Record<string, string> = {
+    rent: `Paid $${pending.amount ?? 0}M rent for ${pending.targetColor ? colorLabel(pending.targetColor) : 'rent'}`,
+    debtCollector: `Paid $${pending.amount ?? 0}M to Debt Collector`,
+    itsMyBirthday: `Paid $${pending.amount ?? 0}M for birthday`,
+    slyDeal: `Lost a property to Sly Deal`,
+    forcedDeal: `Swapped properties via Forced Deal`,
+    dealBreaker: `Lost their ${pending.targetColor ? colorLabel(pending.targetColor) : ''} set to Deal Breaker!`,
+  }
+
   const next: GameState = {
     ...state,
     players,
     phase: 'action',
     pendingAction: null,
-    log: [...state.log, { player: tgt, message: `Accepted ${pending.type}` }],
+    log: [...state.log, { player: tgt, message: resolveMessages[pending.type] ?? `Accepted ${pending.type}` }],
   }
 
   const checked = withWinCheck(next)
