@@ -1,5 +1,5 @@
 import type { Card } from '../game/types'
-import { COLOR_DISPLAY } from '../game/constants'
+import { COLOR_DISPLAY, RENT_VALUES } from '../game/constants'
 
 // Color palette
 export const COLORS = {
@@ -70,7 +70,9 @@ export function splitColors(card: Card): [string, string] | null {
 
 export function cardTooltip(card: Card): string {
   if (card.type === 'property') {
-    return `${card.name} — ${COLOR_DISPLAY[card.color].label} property ($${card.value}M)`
+    const rents = RENT_VALUES[card.color]
+    const rentStr = rents.map((r, i) => `${i + 1}: $${r}M`).join(', ')
+    return `${card.name} — Rent: ${rentStr}`
   }
   if (card.type === 'money') {
     return `$${card.value}M money card`

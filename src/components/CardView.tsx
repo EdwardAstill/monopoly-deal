@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import type { Card } from '../game/types'
 import { COLORS, CARD_SIZE, CARD_SIZE_SMALL, cardColor, splitColors, cardTooltip, cardTypeLabel, cardDisplayName, cardSubtitle } from './theme'
+import { RENT_VALUES, SET_SIZES } from '../game/constants'
+import type { Color } from '../game/types'
 
 interface CardViewProps {
   card: Card
@@ -116,6 +118,12 @@ export default function CardView({ card, onClick, selected, faceDown, small }: C
   const sub = cardSubtitle(card)
   const tooltip = cardTooltip(card)
 
+  // Rent info for property cards
+  let rentColor: Color | null = null
+  if (card.type === 'property') rentColor = card.color
+  const rentTable = rentColor ? RENT_VALUES[rentColor] : null
+  const setSize = rentColor ? SET_SIZES[rentColor] : null
+
   return (
     <div
       style={{ ...baseStyle, background: COLORS.cardSurface, ...borderStyle }}
@@ -148,11 +156,35 @@ export default function CardView({ card, onClick, selected, faceDown, small }: C
             </div>
           )}
         </div>
-        {value && (
-          <div style={{ color: COLORS.textPrimary, fontSize: valueFontSize, fontWeight: 'bold', alignSelf: 'flex-end' }}>
-            {value}
-          </div>
-        )}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          {/* Rent table on property cards */}
+          {rentTable && !small && (
+            <div style={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+              {rentTable.map((rent, i) => (
+                <div key={i} style={{
+                  fontSize: 7,
+                  fontWeight: 600,
+                  color: i === 0 ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.3)',
+                  background: 'rgba(255,255,255,0.05)',
+                  borderRadius: 2,
+                  padding: '1px 3px',
+                  lineHeight: 1,
+                }}>{rent}</div>
+              ))}
+            </div>
+          )}
+          {rentTable && small && (
+            <div style={{ fontSize: 6, color: 'rgba(255,255,255,0.3)' }}>
+              {rentTable[rentTable.length - 1]}M
+            </div>
+          )}
+          {!rentTable && <div />}
+          {value && (
+            <div style={{ color: COLORS.textPrimary, fontSize: valueFontSize, fontWeight: 'bold' }}>
+              {value}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Tooltip */}
