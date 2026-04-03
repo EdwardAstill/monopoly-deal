@@ -343,31 +343,23 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
             </button>
           )
         } else if (name === 'house') {
-          // One button per complete set without a house
-          player.properties.forEach(set => {
-            const isComplete = set.cards.length >= SET_SIZES[set.color]
-            const hasHouse = set.cards.some(c => c.type === 'action' && c.name === 'house')
-            if (isComplete && !hasHouse) {
-              buttons.push(
-                <button
-                  key={`house-${set.color}`}
-                  onClick={() =>
-                    onAction({
-                      type: 'playAction',
-                      cardId: selectedCard.id,
-                      targetColor: set.color,
-                    })
-                  }
-                >
-                  Add House to {COLOR_DISPLAY[set.color].label}
-                </button>
-              )
-            }
-          })
-          if (!player.properties.some(set =>
+          const eligible = player.properties.filter(set =>
             set.cards.length >= SET_SIZES[set.color] &&
-            !set.cards.some(c => c.type === 'action' && c.name === 'house')
-          )) {
+            set.cards.some(c => c.type === 'property') &&
+            !set.hasHouse &&
+            set.color !== 'railroad' && set.color !== 'utility'
+          )
+          eligible.forEach(set => {
+            buttons.push(
+              <button
+                key={`house-${set.color}`}
+                onClick={() => onAction({ type: 'playAction', cardId: selectedCard.id, targetColor: set.color })}
+              >
+                Add House to {COLOR_DISPLAY[set.color].label}
+              </button>
+            )
+          })
+          if (eligible.length === 0) {
             buttons.push(
               <span key="house-info" style={{ fontSize: 11, color: COLORS.textSecondary, alignSelf: 'center' }}>
                 No eligible sets for house
@@ -375,33 +367,23 @@ export default function ActionButtons({ state, selectedCardId, onAction }: Actio
             )
           }
         } else if (name === 'hotel') {
-          // One button per complete set with a house but no hotel
-          player.properties.forEach(set => {
-            const isComplete = set.cards.length >= SET_SIZES[set.color]
-            const hasHouse = set.cards.some(c => c.type === 'action' && c.name === 'house')
-            const hasHotel = set.cards.some(c => c.type === 'action' && c.name === 'hotel')
-            if (isComplete && hasHouse && !hasHotel) {
-              buttons.push(
-                <button
-                  key={`hotel-${set.color}`}
-                  onClick={() =>
-                    onAction({
-                      type: 'playAction',
-                      cardId: selectedCard.id,
-                      targetColor: set.color,
-                    })
-                  }
-                >
-                  Add Hotel to {COLOR_DISPLAY[set.color].label}
-                </button>
-              )
-            }
-          })
-          if (!player.properties.some(set =>
+          const eligible = player.properties.filter(set =>
             set.cards.length >= SET_SIZES[set.color] &&
-            set.cards.some(c => c.type === 'action' && c.name === 'house') &&
-            !set.cards.some(c => c.type === 'action' && c.name === 'hotel')
-          )) {
+            set.cards.some(c => c.type === 'property') &&
+            set.hasHouse && !set.hasHotel &&
+            set.color !== 'railroad' && set.color !== 'utility'
+          )
+          eligible.forEach(set => {
+            buttons.push(
+              <button
+                key={`hotel-${set.color}`}
+                onClick={() => onAction({ type: 'playAction', cardId: selectedCard.id, targetColor: set.color })}
+              >
+                Add Hotel to {COLOR_DISPLAY[set.color].label}
+              </button>
+            )
+          })
+          if (eligible.length === 0) {
             buttons.push(
               <span key="hotel-info" style={{ fontSize: 11, color: COLORS.textSecondary, alignSelf: 'center' }}>
                 No eligible sets for hotel

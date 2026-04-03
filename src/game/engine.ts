@@ -2,7 +2,7 @@ import type {
   GameState, PlayerState, PlayerIndex, Card, Color,
   PropertySet, PropertyCard, WildPropertyCard, ActionCard, RentCard,
   Action, PendingAction, PlayPropertyAction, PlayActionAction,
-  BankCardAction, DiscardAction, RespondAction,
+  BankCardAction, DiscardAction, RespondAction, MoveWildAction,
 } from './types'
 import { SET_SIZES, RENT_VALUES, COLOR_DISPLAY } from './constants'
 import { createDeck, shuffle, drawCards } from './deck'
@@ -216,7 +216,22 @@ export function applyAction(state: GameState, action: Action): GameState {
     case 'pass': return applyPass(state)
     case 'discard': return applyDiscard(state, action)
     case 'respond': return applyRespond(state, action)
+    case 'moveWild': return applyMoveWild(state, action)
   }
+}
+
+function applyMoveWild(state: GameState, action: MoveWildAction): GameState {
+  if (state.phase !== 'action') throw new Error('Not in action phase')
+  const cp = state.currentPlayer
+  const players = clonePlayers(state.players)
+  const { card, properties } = removePropertyCard(players[cp].properties, action.cardId)
+  if (card.type !== 'wild_property') throw new Error('Not a wild property card')
+  players[cp].properties = addPropertyToSet(properties, card, action.targetColor)
+  const log = [...state.log, {
+    player: cp,
+    message: `Moved wild card to ${colorLabel(action.targetColor)}`,
+  }]
+  return withWinCheck({ ...state, players, log })
 }
 
 function applyPlayProperty(state: GameState, action: PlayPropertyAction): GameState {
@@ -461,8 +476,9 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
     }
 
     case 'house': {
-      // Add house to a complete set
+      // Add house to a complete set (not railroad/utility)
       const color = action.targetColor!
+      if (color === 'railroad' || color === 'utility') throw new Error('Cannot add house to railroad or utility')
       const setIdx = players[cp].properties.findIndex(
         s => s.color === color && isSetComplete(s) && !s.hasHouse
       )
@@ -485,6 +501,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
 
     case 'hotel': {
       const color = action.targetColor!
+      if (color === 'railroad' || color === 'utility') throw new Error('Cannot add hotel to railroad or utility')
       const setIdx = players[cp].properties.findIndex(
         s => s.color === color && isSetComplete(s) && s.hasHouse && !s.hasHotel
       )
@@ -764,10 +781,12 @@ export function getValidActions(state: GameState): Action[] {
           break
         }
         case 'forcedDeal': {
-          // Need own property and opponent's incomplete set property
+          // Need own property from incomplete set and opponent's incomplete set property
           const myProps: (PropertyCard | WildPropertyCard)[] = []
           for (const set of player.properties) {
-            for (const p of set.cards) myProps.push(p)
+            if (!isSetComplete(set)) {
+              for (const p of set.cards) myProps.push(p)
+            }
           }
           for (const set of opponent.properties) {
             if (!isSetComplete(set)) {
@@ -801,7 +820,7 @@ export function getValidActions(state: GameState): Action[] {
         }
         case 'house': {
           for (const set of player.properties) {
-            if (isSetComplete(set) && !set.hasHouse) {
+            if (isSetComplete(set) && !set.hasHouse && set.color !== 'railroad' && set.color !== 'utility') {
               actions.push({ type: 'playAction', cardId: card.id, targetColor: set.color })
             }
           }
@@ -809,7 +828,7 @@ export function getValidActions(state: GameState): Action[] {
         }
         case 'hotel': {
           for (const set of player.properties) {
-            if (isSetComplete(set) && set.hasHouse && !set.hasHotel) {
+            if (isSetComplete(set) && set.hasHouse && !set.hasHotel && set.color !== 'railroad' && set.color !== 'utility') {
               actions.push({ type: 'playAction', cardId: card.id, targetColor: set.color })
             }
           }
