@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { Card } from '../game/types'
-import { COLOR_DISPLAY } from '../game/constants'
+import { COLORS, CARD_SIZE, CARD_SIZE_SMALL, cardColor, splitColors, cardTooltip, cardTypeLabel, cardDisplayName, cardSubtitle } from './theme'
 
 interface CardViewProps {
   card: Card
@@ -10,118 +10,52 @@ interface CardViewProps {
   small?: boolean
 }
 
-const ACTION_INFO: Record<string, { label: string; icon: string }> = {
-  dealBreaker: { label: 'Deal Breaker', icon: '💥' },
-  justSayNo: { label: 'Just Say No', icon: '🚫' },
-  slyDeal: { label: 'Sly Deal', icon: '🤫' },
-  forcedDeal: { label: 'Forced Deal', icon: '🔄' },
-  debtCollector: { label: 'Debt Collector', icon: '💰' },
-  itsMyBirthday: { label: "It's My Birthday", icon: '🎂' },
-  passGo: { label: 'Pass Go', icon: '▶️' },
-  house: { label: 'House', icon: '🏠' },
-  hotel: { label: 'Hotel', icon: '🏨' },
-  doubleRent: { label: 'Double Rent', icon: '⚡' },
-}
-
-const CARD_ICON: Record<string, string> = {
-  money: '💵',
-  property: '🏘️',
-  wild_property: '🌈',
-  rent: '📋',
-}
-
-function getBackground(card: Card): string {
-  if (card.type === 'property') return COLOR_DISPLAY[card.color].hex
-  if (card.type === 'wild_property') {
-    if (card.colors.length > 2) return 'linear-gradient(135deg, #FF6347, #FFD700, #228B22, #0000CD)'
-    return `linear-gradient(135deg, ${COLOR_DISPLAY[card.colors[0]].hex}, ${COLOR_DISPLAY[card.colors[1]].hex})`
-  }
-  if (card.type === 'money') return '#85BB65'
-  if (card.type === 'rent') {
-    if (card.colors.length > 2) return 'linear-gradient(135deg, #FF6347, #FF8C00)'
-    return `linear-gradient(135deg, ${COLOR_DISPLAY[card.colors[0]].hex}, ${COLOR_DISPLAY[card.colors[1]].hex})`
-  }
-  if (card.type === 'action') return '#4a4a6a'
-  return '#DDD'
-}
-
-function getIcon(card: Card, small: boolean): string {
-  if (card.type === 'action') return small ? '' : (ACTION_INFO[card.name]?.icon ?? '')
-  return small ? '' : (CARD_ICON[card.type] ?? '')
-}
-
-function getTitle(card: Card): string {
-  if (card.type === 'property') return card.name
-  if (card.type === 'money') return `$${card.value}M`
-  if (card.type === 'action') return ACTION_INFO[card.name]?.label ?? card.name
-  if (card.type === 'rent') {
-    if (card.colors.length > 2) return 'Rent (Any)'
-    return `Rent`
-  }
-  if (card.type === 'wild_property') {
-    if (card.colors.length > 2) return 'Wild'
-    return `Wild`
-  }
-  return ''
-}
-
-const ACTION_SUBTITLE: Record<string, string> = {
-  justSayNo: 'Cancels any action against you',
-  dealBreaker: 'Steal a complete set',
-  slyDeal: 'Steal 1 property',
-  forcedDeal: 'Swap a property',
-  debtCollector: 'Collect $5M',
-  itsMyBirthday: 'Collect $2M',
-  passGo: 'Draw 2 cards',
-  house: '+$3M rent',
-  hotel: '+$4M rent',
-  doubleRent: '2x rent amount',
-}
-
-function getSubtitle(card: Card): string {
-  if (card.type === 'action') {
-    return ACTION_SUBTITLE[card.name] ?? ''
-  }
-  if (card.type === 'rent' && card.colors.length <= 2) {
-    return card.colors.map(c => COLOR_DISPLAY[c].label).join(' / ')
-  }
-  if (card.type === 'wild_property' && card.colors.length <= 2) {
-    return card.colors.map(c => COLOR_DISPLAY[c].label).join(' / ')
-  }
-  if (card.type === 'property') return COLOR_DISPLAY[card.color].label
-  return ''
+function hexWithAlpha(hex: string, alpha: number): string {
+  if (hex.startsWith('rgba')) return hex
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `rgba(${r},${g},${b},${alpha})`
 }
 
 export default function CardView({ card, onClick, selected, faceDown, small }: CardViewProps) {
-  const width = small ? 50 : 80
-  const height = small ? 70 : 110
-  const fontSize = small ? 8 : 10
+  const [hovered, setHovered] = useState(false)
+
+  const w = small ? CARD_SIZE_SMALL.w : CARD_SIZE.w
+  const h = small ? CARD_SIZE_SMALL.h : CARD_SIZE.h
+
+  const typeFontSize = small ? 6 : 8
+  const nameFontSize = small ? 8 : 11
+  const subFontSize = small ? 6 : 8
+  const valueFontSize = small ? 8 : 10
+
+  const transform = selected
+    ? 'translateY(-8px)'
+    : hovered
+    ? 'translateY(-2px)'
+    : 'none'
+
+  const boxShadow = selected
+    ? '0 8px 24px rgba(0,0,0,0.4)'
+    : hovered
+    ? '0 6px 20px rgba(0,0,0,0.3)'
+    : 'none'
 
   const baseStyle: React.CSSProperties = {
-    width,
-    height,
+    width: w,
+    height: h,
     borderRadius: 6,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    padding: small ? 3 : 5,
     boxSizing: 'border-box',
     cursor: onClick ? 'pointer' : 'default',
     userSelect: 'none',
     position: 'relative',
-    transition: 'transform 0.15s, border 0.15s',
-    transform: selected ? 'translateY(-8px)' : 'none',
-    border: selected ? '3px solid black' : '1px solid rgba(0,0,0,0.3)',
+    transition: 'transform 0.15s, box-shadow 0.15s, border 0.15s',
+    transform,
+    boxShadow,
     flexShrink: 0,
-  }
-
-  const textStyle: React.CSSProperties = {
-    color: '#fff',
-    textShadow: '0 1px 2px rgba(0,0,0,0.8)',
-    fontSize,
-    fontWeight: 'bold',
-    lineHeight: 1.2,
-    wordBreak: 'break-word',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
   }
 
   if (faceDown) {
@@ -129,42 +63,142 @@ export default function CardView({ card, onClick, selected, faceDown, small }: C
       <div
         style={{
           ...baseStyle,
-          background: '#4A90D9',
-          border: selected ? '3px solid black' : '2px solid #2C5F8A',
+          background: COLORS.cardSurface,
+          border: `1px solid ${COLORS.borderStructural}`,
           alignItems: 'center',
           justifyContent: 'center',
         }}
         onClick={onClick}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <span style={{ ...textStyle, fontSize: small ? 10 : 14 }}>MD</span>
+        <span style={{ color: 'rgba(255,255,255,0.1)', fontSize: small ? 10 : 14, fontWeight: 'bold' }}>MD</span>
       </div>
     )
   }
 
-  const bg = getBackground(card)
-  const title = getTitle(card)
-  const subtitle = getSubtitle(card)
-  const icon = getIcon(card, !!small)
+  const colors = splitColors(card)
+  const primaryColor = cardColor(card)
+  const borderOpacity = selected ? 0.7 : 0.4
+  const borderWidth = selected ? 2 : 1.5
+
+  let borderStyle: React.CSSProperties
+  if (colors) {
+    const [c1, c2] = colors
+    const blendTop = `linear-gradient(to right, ${hexWithAlpha(c1, borderOpacity)}, ${hexWithAlpha(c2, borderOpacity)})`
+    borderStyle = {
+      borderLeft: `${borderWidth}px solid ${hexWithAlpha(c1, borderOpacity)}`,
+      borderRight: `${borderWidth}px solid ${hexWithAlpha(c2, borderOpacity)}`,
+      borderTop: `${borderWidth}px solid transparent`,
+      borderBottom: `${borderWidth}px solid transparent`,
+      // Use outline for top/bottom blended effect — fallback to first color
+      outline: 'none',
+    }
+    // We'll use a pseudo-border approach via boxSizing and extra wrapper isn't feasible with inline styles,
+    // so we approximate with left/right split and use blended value for top/bottom
+    const blendColor = hexWithAlpha(primaryColor, borderOpacity)
+    borderStyle = {
+      borderLeft: `${borderWidth}px solid ${hexWithAlpha(c1, borderOpacity)}`,
+      borderRight: `${borderWidth}px solid ${hexWithAlpha(c2, borderOpacity)}`,
+      borderTop: `${borderWidth}px solid ${blendColor}`,
+      borderBottom: `${borderWidth}px solid ${blendColor}`,
+    }
+  } else {
+    borderStyle = {
+      border: `${borderWidth}px solid ${hexWithAlpha(primaryColor, borderOpacity)}`,
+    }
+  }
+
+  const stripeHeight = 3
   const value = card.type === 'wild_property' && card.value === 0 ? null : `$${card.value}M`
+  const typeLabel = cardTypeLabel(card)
+  const name = cardDisplayName(card)
+  const sub = cardSubtitle(card)
+  const tooltip = cardTooltip(card)
 
   return (
     <div
-      style={{ ...baseStyle, background: bg }}
+      style={{ ...baseStyle, background: COLORS.cardSurface, ...borderStyle }}
       onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      <div>
-        {icon && <div style={{ fontSize: small ? 12 : 20, lineHeight: 1 }}>{icon}</div>}
-        <span style={textStyle}>{title}</span>
-        {subtitle && (
-          <div style={{ ...textStyle, fontWeight: 'normal', fontSize: small ? 6 : 8, opacity: 0.85, marginTop: 1 }}>
-            {subtitle}
+      {/* Color stripe at top */}
+      {colors ? (
+        <div style={{ display: 'flex', height: stripeHeight, flexShrink: 0 }}>
+          <div style={{ flex: 1, background: colors[0] }} />
+          <div style={{ flex: 1, background: colors[1] }} />
+        </div>
+      ) : (
+        <div style={{ height: stripeHeight, background: primaryColor, flexShrink: 0 }} />
+      )}
+
+      {/* Card content */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: small ? 3 : 5 }}>
+        <div>
+          <div style={{ color: COLORS.textSecondary, fontSize: typeFontSize, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1.2 }}>
+            {typeLabel}
+          </div>
+          <div style={{ color: COLORS.textPrimary, fontSize: nameFontSize, fontWeight: 'bold', lineHeight: 1.2, marginTop: 2, wordBreak: 'break-word' }}>
+            {name}
+          </div>
+          {sub && (
+            <div style={{ color: COLORS.textSecondary, fontSize: subFontSize, lineHeight: 1.2, marginTop: 1 }}>
+              {sub}
+            </div>
+          )}
+        </div>
+        {value && (
+          <div style={{ color: COLORS.textPrimary, fontSize: valueFontSize, fontWeight: 'bold', alignSelf: 'flex-end' }}>
+            {value}
           </div>
         )}
       </div>
-      {value && (
-        <span style={{ ...textStyle, alignSelf: 'flex-end', fontSize: small ? 7 : 9 }}>
-          {value}
-        </span>
+
+      {/* Tooltip */}
+      {hovered && !small && tooltip && (
+        <div style={{
+          position: 'absolute',
+          bottom: '100%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          marginBottom: 8,
+          background: '#0f172a',
+          border: '1px solid rgba(255,255,255,0.12)',
+          borderRadius: 6,
+          padding: '6px 10px',
+          color: COLORS.textPrimary,
+          fontSize: 11,
+          whiteSpace: 'nowrap',
+          zIndex: 100,
+          pointerEvents: 'none',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+        }}>
+          {tooltip}
+          {/* Arrow */}
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 0,
+            height: 0,
+            borderLeft: '5px solid transparent',
+            borderRight: '5px solid transparent',
+            borderTop: '5px solid rgba(255,255,255,0.12)',
+          }} />
+          <div style={{
+            position: 'absolute',
+            top: '100%',
+            left: '50%',
+            transform: 'translateX(-50%) translateY(-1px)',
+            width: 0,
+            height: 0,
+            borderLeft: '5px solid transparent',
+            borderRight: '5px solid transparent',
+            borderTop: '5px solid #0f172a',
+          }} />
+        </div>
       )}
     </div>
   )
