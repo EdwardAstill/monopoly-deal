@@ -1,0 +1,81 @@
+<h2>Which visual direction feels right?</h2>
+<p class="subtitle">All three are "cartoonish" — they just interpret it differently</p>
+
+<div class="cards">
+
+  <!-- Option A: Board Game Classic -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #f5e9c8; border-bottom: 3px solid #8b6914; padding: 16px; font-family: Georgia, serif;">
+      <div style="background: #c8960a; color: white; text-align: center; padding: 6px; border-radius: 4px; font-size: 13px; font-weight: bold; border: 3px solid #8b6914; text-transform: uppercase; letter-spacing: 1px;">Monopoly Deal</div>
+      <div style="margin-top: 10px; display: flex; gap: 8px; justify-content: center;">
+        <!-- fake card -->
+        <div style="width:52px;height:72px;background:#d4edda;border:3px solid #2d6a4f;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:4px;box-shadow:2px 2px 0 #2d6a4f;">
+          <div style="font-size:7px;font-weight:bold;color:#2d6a4f;text-transform:uppercase">Property</div>
+          <div style="font-size:9px;font-weight:bold;color:#1a1a1a;text-align:center">Boardwalk</div>
+          <div style="font-size:9px;font-weight:bold;color:#2d6a4f">$4M</div>
+        </div>
+        <div style="width:52px;height:72px;background:#fff3cd;border:3px solid #856404;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:4px;box-shadow:2px 2px 0 #856404;">
+          <div style="font-size:7px;font-weight:bold;color:#856404;text-transform:uppercase">Money</div>
+          <div style="font-size:16px;font-weight:bold;color:#856404">$5M</div>
+          <div style="font-size:7px;color:#856404">★</div>
+        </div>
+      </div>
+      <div style="margin-top: 8px; background: #1a1a1a; color: #f5e9c8; text-align:center; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 2px solid #8b6914;">End Turn</div>
+    </div>
+    <div class="card-body">
+      <h3>A — Board Game Classic</h3>
+      <p>Warm cream/tan backgrounds, bold serif fonts, thick coloured borders, rich gold accents. Feels like holding the real physical card game.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Cartoon / Comic -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #87CEEB; border-bottom: 3px solid #222; padding: 16px; font-family: 'Comic Sans MS', cursive, sans-serif;">
+      <div style="background: #FFD700; color: #222; text-align: center; padding: 6px; border-radius: 8px; font-size: 14px; font-weight: 900; border: 3px solid #222; text-shadow: 1px 1px 0 rgba(0,0,0,0.2);">Monopoly Deal!</div>
+      <div style="margin-top: 10px; display: flex; gap: 8px; justify-content: center;">
+        <div style="width:52px;height:72px;background:#ff6b6b;border:3px solid #222;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:4px;box-shadow:3px 3px 0 #222;">
+          <div style="font-size:7px;font-weight:900;color:#fff;text-transform:uppercase;text-shadow:1px 1px 0 #222">Prop!</div>
+          <div style="font-size:8px;font-weight:900;color:#fff;text-align:center;text-shadow:1px 1px 0 #222">Park Place</div>
+          <div style="font-size:9px;font-weight:900;color:#FFD700;text-shadow:1px 1px 0 #222">$4M</div>
+        </div>
+        <div style="width:52px;height:72px;background:#51cf66;border:3px solid #222;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:4px;box-shadow:3px 3px 0 #222;">
+          <div style="font-size:7px;font-weight:900;color:#fff;text-transform:uppercase;text-shadow:1px 1px 0 #222">Cash!</div>
+          <div style="font-size:16px;font-weight:900;color:#fff;text-shadow:1px 1px 0 #222">$5M</div>
+          <div style="font-size:8px;color:#FFD700;text-shadow:1px 1px 0 #222">💰</div>
+        </div>
+      </div>
+      <div style="margin-top: 8px; background: #ff6b6b; color: #fff; text-align:center; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 900; border: 2px solid #222; box-shadow: 2px 2px 0 #222;">End Turn →</div>
+    </div>
+    <div class="card-body">
+      <h3>B — Cartoon / Comic Book</h3>
+      <p>Bright saturated colours, thick black outlines (cel-shading), playful rounded shapes, chunky bold fonts. Fun and energetic.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Retro / Pixel -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #1a0533; border-bottom: 3px solid #9b59b6; padding: 16px; font-family: 'Courier New', monospace; image-rendering: pixelated;">
+      <div style="background: #9b59b6; color: #fff; text-align: center; padding: 6px; border-radius: 0; font-size: 11px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase; border: 2px solid #e056fd;">MONOPOLY DEAL</div>
+      <div style="margin-top: 10px; display: flex; gap: 8px; justify-content: center;">
+        <div style="width:52px;height:72px;background:#0d1117;border:2px solid #3de85a;border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:4px;box-shadow:0 0 8px #3de85a44;">
+          <div style="font-size:6px;font-weight:bold;color:#3de85a;text-transform:uppercase;letter-spacing:1px">PROP</div>
+          <div style="font-size:7px;font-weight:bold;color:#e2e8f0;text-align:center">Boardwalk</div>
+          <div style="font-size:9px;font-weight:bold;color:#f0e040">$4M</div>
+        </div>
+        <div style="width:52px;height:72px;background:#0d1117;border:2px solid #f0e040;border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:4px;box-shadow:0 0 8px #f0e04044;">
+          <div style="font-size:6px;font-weight:bold;color:#f0e040;text-transform:uppercase;letter-spacing:1px">CASH</div>
+          <div style="font-size:16px;font-weight:bold;color:#f0e040">$5</div>
+          <div style="font-size:7px;color:#f0e040">●●●</div>
+        </div>
+      </div>
+      <div style="margin-top: 8px; background: #9b59b6; color: #fff; text-align:center; padding: 4px 8px; border-radius: 2px; font-size: 10px; font-weight: bold; letter-spacing: 2px; border: 1px solid #e056fd;">[ END TURN ]</div>
+    </div>
+    <div class="card-body">
+      <h3>C — Retro Pixel / Arcade</h3>
+      <p>Pixel fonts, neon glow on dark background, NES/arcade game aesthetic. Nostalgic and stylised.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top: 16px;">Click to select. You can also just tell me in the terminal — or describe a different direction entirely.</p>

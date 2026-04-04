@@ -1,0 +1,109 @@
+<h2>Which card style from the real game?</h2>
+<p class="subtitle">Both are from actual Monopoly Deal — pick which vibe to build from</p>
+
+<div class="split">
+
+  <!-- Option A: Classic ornate -->
+  <div class="mockup" data-choice="classic" onclick="toggleSelect(this)" style="cursor:pointer">
+    <div class="mockup-header">A — Classic / Ornate <span style="font-size:10px;opacity:0.6">(like images 1, 2, 4)</span></div>
+    <div class="mockup-body" style="background:#e8e8e8;display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;font-family:Georgia,serif">
+
+      <!-- Action card ornate style -->
+      <div style="width:100px;height:140px;background:#f0f0e8;border:2px solid #999;border-radius:10px;position:relative;display:flex;flex-direction:column;align-items:center;padding:8px 6px 6px;box-shadow:2px 4px 10px rgba(0,0,0,0.25);overflow:hidden">
+        <!-- Ornate border inset -->
+        <div style="position:absolute;inset:4px;border:1.5px solid #bbb;border-radius:7px;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,0.3),transparent)"></div>
+        <!-- Value badge top-left -->
+        <div style="position:absolute;top:6px;left:6px;width:20px;height:20px;border-radius:50%;border:2px solid #c00;background:white;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:bold;color:#c00;z-index:2;line-height:1">M<br>1</div>
+        <!-- Type label -->
+        <div style="font-size:8px;font-weight:bold;letter-spacing:0.5px;color:#333;margin-top:6px;text-transform:uppercase">Action Card</div>
+        <!-- Central circle -->
+        <div style="width:56px;height:56px;border-radius:50%;border:3px solid #222;background:white;display:flex;align-items:center;justify-content:center;margin:6px 0;flex-direction:column;box-shadow:inset 0 1px 3px rgba(0,0,0,0.1)">
+          <div style="font-size:11px;font-weight:900;color:#222;text-align:center;line-height:1.1">PASS<br>GO</div>
+          <div style="width:24px;height:3px;background:#c00;margin-top:3px;border-radius:2px"></div>
+        </div>
+        <!-- Description -->
+        <div style="font-size:6px;color:#444;text-align:center;line-height:1.4">Draw 2 extra cards.<br>Play into center to use.</div>
+        <!-- Value badge bottom-right -->
+        <div style="position:absolute;bottom:6px;right:6px;width:20px;height:20px;border-radius:50%;border:2px solid #c00;background:white;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:bold;color:#c00;z-index:2;line-height:1">M<br>1</div>
+      </div>
+
+      <!-- Property wild card -->
+      <div style="width:100px;height:140px;background:white;border:2px solid #999;border-radius:10px;position:relative;display:flex;flex-direction:column;overflow:hidden;box-shadow:2px 4px 10px rgba(0,0,0,0.25)">
+        <!-- Colored top band -->
+        <div style="background:#f5a623;padding:4px 6px 4px 24px;border-bottom:1px solid #d4880a;flex-shrink:0">
+          <div style="font-size:7px;font-weight:bold;letter-spacing:0.3px;color:#fff;text-transform:uppercase">Property</div>
+          <div style="font-size:11px;font-weight:900;color:#fff;line-height:1">Wild Card</div>
+        </div>
+        <!-- Value badge -->
+        <div style="position:absolute;top:5px;left:5px;width:20px;height:20px;border-radius:50%;border:2px solid #c00;background:white;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:bold;color:#c00;z-index:2;line-height:1">M<br>2</div>
+        <!-- Body -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;gap:3px">
+          <div style="font-size:6px;color:#666;font-style:italic">(Use card either way up)</div>
+          <!-- Rent rows -->
+          <div style="width:100%;display:flex;flex-direction:column;gap:2px;padding:0 4px">
+            <div style="display:flex;justify-content:space-between;font-size:6px;color:#333;border-bottom:1px dotted #ccc;padding-bottom:1px"><span>Full set:</span><span style="font-weight:bold">M4</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:6px;color:#333;border-bottom:1px dotted #ccc;padding-bottom:1px"><span>2:</span><span style="font-weight:bold">M2</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:6px;color:#333"><span>1:</span><span style="font-weight:bold">M1</span></div>
+          </div>
+        </div>
+        <!-- Bottom pink band (upside down) -->
+        <div style="background:#d63ca0;padding:3px 6px;border-top:1px solid #a82880;text-align:center;flex-shrink:0">
+          <div style="font-size:7px;font-weight:bold;color:#fff;transform:rotate(180deg)">WILD CARD</div>
+        </div>
+      </div>
+
+    </div>
+    <div style="padding:8px 12px;font-size:12px;color:#ccc">
+      Cream/white background, ornate border inset, red circular value badges, serif typography. Faithful to the vintage card look.
+    </div>
+  </div>
+
+  <!-- Option B: Bold modern -->
+  <div class="mockup" data-choice="bold" onclick="toggleSelect(this)" style="cursor:pointer">
+    <div class="mockup-header">B — Bold / Modern <span style="font-size:10px;opacity:0.6">(like image 3)</span></div>
+    <div class="mockup-body" style="background:#e8e8e8;display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;font-family:Arial,sans-serif">
+
+      <!-- Green action card bold style -->
+      <div style="width:100px;height:140px;background:#5cb85c;border:2px solid #3a8a3a;border-radius:12px;position:relative;display:flex;flex-direction:column;align-items:center;overflow:hidden;box-shadow:3px 5px 12px rgba(0,0,0,0.3)">
+        <!-- Top band -->
+        <div style="background:#7dd87d;width:100%;padding:4px 4px 4px 24px;border-bottom:2px solid #3a8a3a;flex-shrink:0">
+          <div style="font-size:8px;font-weight:900;letter-spacing:1px;color:#1a4a1a;text-transform:uppercase">Action</div>
+        </div>
+        <!-- Value badge -->
+        <div style="position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;border:2px solid #1a4a1a;background:white;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#1a4a1a;z-index:2">4</div>
+        <!-- Central circle with icon -->
+        <div style="width:58px;height:58px;border-radius:50%;border:3px solid #1a4a1a;background:white;display:flex;align-items:center;justify-content:center;margin:8px 0;flex-direction:column">
+          <!-- Simple hotel icon -->
+          <div style="font-size:22px;line-height:1">🏨</div>
+        </div>
+        <!-- Card name -->
+        <div style="font-size:13px;font-weight:900;color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,0.3);text-align:center;line-height:1">HOTEL</div>
+        <!-- Description -->
+        <div style="font-size:6px;color:#e8ffe8;text-align:center;line-height:1.3;padding:4px 6px">Place on a complete property set with a house.</div>
+      </div>
+
+      <!-- Pink action card bold style -->
+      <div style="width:100px;height:140px;background:#e91e8c;border:2px solid #b01068;border-radius:12px;position:relative;display:flex;flex-direction:column;align-items:center;overflow:hidden;box-shadow:3px 5px 12px rgba(0,0,0,0.3)">
+        <!-- Top band -->
+        <div style="background:#f060aa;width:100%;padding:4px 4px 4px 24px;border-bottom:2px solid #b01068;flex-shrink:0">
+          <div style="font-size:8px;font-weight:900;letter-spacing:1px;color:#fff;text-transform:uppercase">Action</div>
+        </div>
+        <!-- Value badge -->
+        <div style="position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:white;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#e91e8c;z-index:2">2</div>
+        <!-- Central circle -->
+        <div style="width:58px;height:58px;border-radius:50%;border:3px solid #fff;background:white;display:flex;align-items:center;justify-content:center;margin:8px 0;flex-direction:column">
+          <div style="font-size:20px;line-height:1">🎂</div>
+        </div>
+        <div style="font-size:10px;font-weight:900;color:#fff;text-align:center;line-height:1.1;text-shadow:1px 1px 0 rgba(0,0,0,0.2)">IT'S YOUR<br>BIRTHDAY</div>
+        <div style="font-size:6px;color:#ffe8f5;text-align:center;line-height:1.3;padding:4px 6px">Collect $2M from each player.</div>
+      </div>
+
+    </div>
+    <div style="padding:8px 12px;font-size:12px;color:#ccc">
+      Solid vivid background per card type, bold sans-serif, emoji-style icons, punchy and modern. High energy.
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px">You can also mix — e.g. classic layout but with the bright action card colours. Tell me in the terminal.</p>

@@ -111,6 +111,12 @@ export interface RespondAction {
   paymentCardIds?: string[]
 }
 
+export interface MoveWildAction {
+  type: 'moveWild'
+  cardId: string
+  targetColor: Color
+}
+
 export type Action =
   | PlayPropertyAction
   | PlayActionAction
@@ -118,6 +124,7 @@ export type Action =
   | PassAction
   | DiscardAction
   | RespondAction
+  | MoveWildAction
 
 export interface LogEntry {
   player: PlayerIndex
