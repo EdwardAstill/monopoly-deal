@@ -14,19 +14,60 @@ interface RespondPanelProps {
   onAction: (action: Action) => void
 }
 
+const NO_PAYMENT_TYPES = new Set(['slyDeal', 'forcedDeal', 'dealBreaker', 'justSayNo'])
+
+const PENDING_LABELS: Record<string, string> = {
+  slyDeal: 'Sly Deal — they are stealing one of your properties.',
+  forcedDeal: 'Forced Deal — they are swapping one of your properties.',
+  dealBreaker: 'Deal Breaker — they are taking your complete set!',
+  justSayNo: 'Just Say No! — counter with your own, or let it stand.',
+}
+
 function RespondPanel({ state, onAction }: RespondPanelProps) {
   const [selectedPayment, setSelectedPayment] = useState<string[]>([])
   const player = state.players[0]
   const pending = state.pendingAction!
 
+  const hasJustSayNo = player.hand.some(
+    c => c.type === 'action' && c.name === 'justSayNo'
+  )
+
+  const jsnButton = hasJustSayNo && (
+    <button
+      onClick={() => onAction({ type: 'respond', accept: false })}
+      style={{
+        background: 'rgba(244,63,94,0.15)',
+        borderColor: 'rgba(244,63,94,0.3)',
+        color: COLORS.red,
+      }}
+    >
+      Just Say No!
+    </button>
+  )
+
+  // Sly Deal, Forced Deal, Deal Breaker — no payment, just accept or JSN
+  if (NO_PAYMENT_TYPES.has(pending.type)) {
+    const acceptLabel = pending.type === 'justSayNo' ? 'Accept (block stands)' : 'Accept'
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <div style={{ color: COLORS.pink, fontWeight: 'bold' }}>
+          {PENDING_LABELS[pending.type] ?? pending.type}
+        </div>
+        <div style={{ display: 'flex', gap: 6 }}>
+          <button onClick={() => onAction({ type: 'respond', accept: true })}>
+            {acceptLabel}
+          </button>
+          {jsnButton}
+        </div>
+      </div>
+    )
+  }
+
+  // Rent, Debt Collector, It's My Birthday — select cards to pay
   const paymentCards: Card[] = [
     ...player.bank,
     ...player.properties.flatMap(set => set.cards),
   ]
-
-  const hasJustSayNo = player.hand.some(
-    c => c.type === 'action' && c.name === 'justSayNo'
-  )
 
   const toggleCard = (id: string) => {
     setSelectedPayment(prev =>
@@ -41,8 +82,7 @@ function RespondPanel({ state, onAction }: RespondPanelProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       <div style={{ color: COLORS.pink, fontWeight: 'bold' }}>
-        Respond to {pending.type}
-        {pending.amount != null ? ` ($${pending.amount})` : ''}
+        Pay {pending.amount != null ? `$${pending.amount}M` : ''} for {pending.type}
       </div>
       <div style={{ fontSize: 11, color: COLORS.textSecondary }}>Select cards to pay:</div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
@@ -62,16 +102,15 @@ function RespondPanel({ state, onAction }: RespondPanelProps) {
               cursor: 'pointer',
             }}
           >
-            ${card.value}{' '}
             {card.type === 'property'
-              ? card.name
+              ? `${card.name} ($${card.value}M)`
               : card.type === 'wild_property'
-              ? 'Wild'
-              : `$${card.value}`}
+              ? `Wild ($${card.value}M)`
+              : `$${card.value}M`}
           </button>
         ))}
       </div>
-      <div style={{ fontSize: 11, color: COLORS.textSecondary }}>Pay total: ${payTotal}</div>
+      <div style={{ fontSize: 11, color: COLORS.textSecondary }}>Pay total: ${payTotal}M</div>
       <div style={{ display: 'flex', gap: 6 }}>
         <button
           onClick={() =>
@@ -80,18 +119,7 @@ function RespondPanel({ state, onAction }: RespondPanelProps) {
         >
           Pay
         </button>
-        {hasJustSayNo && (
-          <button
-            onClick={() => onAction({ type: 'respond', accept: false })}
-            style={{
-              background: 'rgba(244,63,94,0.15)',
-              borderColor: 'rgba(244,63,94,0.3)',
-              color: COLORS.red,
-            }}
-          >
-            Just Say No!
-          </button>
-        )}
+        {jsnButton}
       </div>
     </div>
   )

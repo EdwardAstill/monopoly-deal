@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import ReactDOM from 'react-dom'
 import type { Card } from '../game/types'
 import { COLORS, CARD_SIZE, CARD_SIZE_SMALL, cardColor, splitColors, cardTooltip, cardTypeLabel, cardDisplayName, cardSubtitle } from './theme'
-import { RENT_VALUES, SET_SIZES } from '../game/constants'
+import { RENT_VALUES, SET_SIZES, COLOR_DISPLAY } from '../game/constants'
 import type { Color } from '../game/types'
 
 interface CardViewProps {
@@ -20,8 +21,130 @@ function hexWithAlpha(hex: string, alpha: number): string {
   return `rgba(${r},${g},${b},${alpha})`
 }
 
+function CardPopup({ card, x, y, onClose }: { card: Card; x: number; y: number; onClose: () => void }) {
+  useEffect(() => {
+    const close = () => onClose()
+    document.addEventListener('mousedown', close)
+    return () => document.removeEventListener('mousedown', close)
+  }, [onClose])
+
+  const primaryColor = cardColor(card)
+
+  // Adjust position so popup stays on screen
+  const popupW = 180
+  const popupMaxH = 220
+  const left = x + popupW > window.innerWidth ? x - popupW : x + 8
+  const top = y + popupMaxH > window.innerHeight ? y - popupMaxH : y + 8
+
+  let content: React.ReactNode
+
+  if (card.type === 'property') {
+    const rents = RENT_VALUES[card.color]
+    content = (
+      <>
+        <div style={{ color: COLORS.textSecondary, fontSize: 10, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          Rent — {COLOR_DISPLAY[card.color].label}
+        </div>
+        {rents.map((rent, i) => (
+          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
+            <span style={{ color: COLORS.textSecondary, fontSize: 11 }}>{i + 1} card{i > 0 ? 's' : ''}</span>
+            <span style={{ color: COLORS.textPrimary, fontSize: 12, fontWeight: 'bold' }}>${rent}M</span>
+          </div>
+        ))}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: 6, paddingTop: 6, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ color: COLORS.textSecondary, fontSize: 10 }}>Set size</span>
+          <span style={{ color: COLORS.textSecondary, fontSize: 10 }}>{SET_SIZES[card.color]}</span>
+        </div>
+      </>
+    )
+  } else if (card.type === 'rent') {
+    const labels = card.colors.length > 2 ? ['Any Color'] : card.colors.map(c => COLOR_DISPLAY[c].label)
+    content = (
+      <>
+        <div style={{ color: COLORS.textSecondary, fontSize: 10, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Rent Card</div>
+        <div style={{ color: COLORS.textPrimary, fontSize: 11, marginBottom: 6 }}>Collect rent from all players for a property set you own.</div>
+        <div style={{ color: COLORS.textSecondary, fontSize: 10 }}>Applies to: {labels.join(', ')}</div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: 6, paddingTop: 6, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ color: COLORS.textSecondary, fontSize: 10 }}>Bank value</span>
+          <span style={{ color: COLORS.textPrimary, fontSize: 11, fontWeight: 'bold' }}>${card.value}M</span>
+        </div>
+      </>
+    )
+  } else if (card.type === 'wild_property') {
+    const labels = card.colors.length > 2 ? ['All Colors'] : card.colors.map(c => COLOR_DISPLAY[c].label)
+    content = (
+      <>
+        <div style={{ color: COLORS.textSecondary, fontSize: 10, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Wild Property</div>
+        <div style={{ color: COLORS.textPrimary, fontSize: 11, marginBottom: 6 }}>Can be placed in any matching property set.</div>
+        <div style={{ color: COLORS.textSecondary, fontSize: 10, marginBottom: 6 }}>Colors: {labels.join(', ')}</div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: 6, paddingTop: 6, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ color: COLORS.textSecondary, fontSize: 10 }}>Bank value</span>
+          <span style={{ color: COLORS.textPrimary, fontSize: 11, fontWeight: 'bold' }}>${card.value}M</span>
+        </div>
+      </>
+    )
+  } else if (card.type === 'money') {
+    content = (
+      <>
+        <div style={{ color: COLORS.textSecondary, fontSize: 10, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Money</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ color: COLORS.textSecondary, fontSize: 11 }}>Value</span>
+          <span style={{ color: COLORS.textPrimary, fontSize: 16, fontWeight: 'bold' }}>${card.value}M</span>
+        </div>
+        <div style={{ color: COLORS.textSecondary, fontSize: 10, marginTop: 6 }}>Play to your bank.</div>
+      </>
+    )
+  } else if (card.type === 'action') {
+    const desc = cardTooltip(card)
+    content = (
+      <>
+        <div style={{ color: COLORS.textSecondary, fontSize: 10, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Action</div>
+        <div style={{ color: COLORS.textPrimary, fontSize: 11, marginBottom: 6, lineHeight: 1.4 }}>{desc}</div>
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: 6, paddingTop: 6, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ color: COLORS.textSecondary, fontSize: 10 }}>Bank value</span>
+          <span style={{ color: COLORS.textPrimary, fontSize: 11, fontWeight: 'bold' }}>${card.value}M</span>
+        </div>
+      </>
+    )
+  }
+
+  return ReactDOM.createPortal(
+    <div
+      onMouseDown={e => e.stopPropagation()}
+      style={{
+        position: 'fixed',
+        left,
+        top,
+        width: popupW,
+        background: '#0f172a',
+        border: `1px solid ${primaryColor}55`,
+        borderTop: `2px solid ${primaryColor}`,
+        borderRadius: 8,
+        padding: '10px 12px',
+        zIndex: 9999,
+        boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+        pointerEvents: 'auto',
+      }}
+    >
+      <div style={{ fontWeight: 'bold', fontSize: 12, color: COLORS.textPrimary, marginBottom: 8 }}>
+        {cardDisplayName(card)}
+      </div>
+      {content}
+    </div>,
+    document.body
+  )
+}
+
 export default function CardView({ card, onClick, selected, faceDown, small }: CardViewProps) {
   const [hovered, setHovered] = useState(false)
+  const [popup, setPopup] = useState<{ x: number; y: number } | null>(null)
+
+  const closePopup = useCallback(() => setPopup(null), [])
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setPopup({ x: e.clientX, y: e.clientY })
+  }
 
   const w = small ? CARD_SIZE_SMALL.w : CARD_SIZE.w
   const h = small ? CARD_SIZE_SMALL.h : CARD_SIZE.h
@@ -87,17 +210,6 @@ export default function CardView({ card, onClick, selected, faceDown, small }: C
   let borderStyle: React.CSSProperties
   if (colors) {
     const [c1, c2] = colors
-    const blendTop = `linear-gradient(to right, ${hexWithAlpha(c1, borderOpacity)}, ${hexWithAlpha(c2, borderOpacity)})`
-    borderStyle = {
-      borderLeft: `${borderWidth}px solid ${hexWithAlpha(c1, borderOpacity)}`,
-      borderRight: `${borderWidth}px solid ${hexWithAlpha(c2, borderOpacity)}`,
-      borderTop: `${borderWidth}px solid transparent`,
-      borderBottom: `${borderWidth}px solid transparent`,
-      // Use outline for top/bottom blended effect — fallback to first color
-      outline: 'none',
-    }
-    // We'll use a pseudo-border approach via boxSizing and extra wrapper isn't feasible with inline styles,
-    // so we approximate with left/right split and use blended value for top/bottom
     const blendColor = hexWithAlpha(primaryColor, borderOpacity)
     borderStyle = {
       borderLeft: `${borderWidth}px solid ${hexWithAlpha(c1, borderOpacity)}`,
@@ -122,12 +234,12 @@ export default function CardView({ card, onClick, selected, faceDown, small }: C
   let rentColor: Color | null = null
   if (card.type === 'property') rentColor = card.color
   const rentTable = rentColor ? RENT_VALUES[rentColor] : null
-  const setSize = rentColor ? SET_SIZES[rentColor] : null
 
   return (
     <div
       style={{ ...baseStyle, background: COLORS.cardSurface, ...borderStyle }}
       onClick={onClick}
+      onContextMenu={handleContextMenu}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -232,6 +344,7 @@ export default function CardView({ card, onClick, selected, faceDown, small }: C
           }} />
         </div>
       )}
+      {popup && <CardPopup card={card} x={popup.x} y={popup.y} onClose={closePopup} />}
     </div>
   )
 }

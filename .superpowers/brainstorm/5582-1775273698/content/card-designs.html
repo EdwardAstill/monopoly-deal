@@ -1,0 +1,287 @@
+<h2>Card Design — Section 1 of 2</h2>
+<p class="subtitle">SVG mockups faithful to your reference images. Click a card to select it if you want to flag issues.</p>
+
+<style>
+  .card-row { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+  .card-label { text-align: center; font-size: 12px; color: #aaa; margin-top: 8px; }
+  .card-group { display: flex; flex-direction: column; align-items: center; }
+</style>
+
+<div class="section">
+  <h3>Money Cards</h3>
+  <p class="subtitle">Cream background, ornate border, large central medallion with value</p>
+  <div class="card-row">
+
+    <!-- $1M Money Card -->
+    <div class="card-group">
+      <svg width="110" height="154" viewBox="0 0 110 154" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Ornate border pattern (Greek key approximation) -->
+          <pattern id="greek-key" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+            <rect width="10" height="10" fill="none"/>
+            <path d="M0,0 L10,0 L10,4 L4,4 L4,10 L0,10 Z" fill="#8a9a7a" opacity="0.4"/>
+            <rect x="2" y="2" width="6" height="6" fill="#c8d4b0" opacity="0.3"/>
+          </pattern>
+        </defs>
+        <!-- Card background -->
+        <rect x="2" y="2" width="106" height="150" rx="10" ry="10" fill="#f0ede0" stroke="#b0a880" stroke-width="1.5"/>
+        <!-- Ornate border fill -->
+        <rect x="6" y="6" width="98" height="142" rx="7" ry="7" fill="url(#greek-key)" opacity="0.8"/>
+        <!-- Inner cream field -->
+        <rect x="12" y="12" width="86" height="130" rx="4" ry="4" fill="#f5f2e2"/>
+        <!-- Inner border lines -->
+        <rect x="12" y="12" width="86" height="130" rx="4" ry="4" fill="none" stroke="#9a9070" stroke-width="1"/>
+        <rect x="14" y="14" width="82" height="126" rx="3" ry="3" fill="none" stroke="#9a9070" stroke-width="0.5"/>
+
+        <!-- Central circle -->
+        <circle cx="55" cy="77" r="32" fill="#eae7d0" stroke="#2a2820" stroke-width="2.5"/>
+        <circle cx="55" cy="77" r="28" fill="none" stroke="#2a2820" stroke-width="0.8"/>
+        <!-- M symbol (monopoly hat shape approximation) -->
+        <text x="55" y="71" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="13" fill="#1a1810">M</text>
+        <line x1="42" y1="74" x2="68" y2="74" stroke="#1a1810" stroke-width="1.5"/>
+        <!-- Value -->
+        <text x="55" y="90" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="20" fill="#1a1810">1</text>
+        <text x="55" y="101" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#1a1810">Million</text>
+
+        <!-- Value badge top-left -->
+        <circle cx="20" cy="20" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+        <text x="20" y="17" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+        <text x="20" y="25" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">1</text>
+
+        <!-- Value badge bottom-right (rotated) -->
+        <g transform="rotate(180, 90, 134)">
+          <circle cx="90" cy="134" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+          <text x="90" y="131" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+          <text x="90" y="139" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">1</text>
+        </g>
+
+        <!-- Copyright line -->
+        <text x="55" y="148" text-anchor="middle" font-family="Arial,sans-serif" font-size="5" fill="#aaa">© 1935, 2008 HASBRO</text>
+      </svg>
+      <div class="card-label">$1M Money</div>
+    </div>
+
+    <!-- $5M Money Card -->
+    <div class="card-group">
+      <svg width="110" height="154" viewBox="0 0 110 154" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="106" height="150" rx="10" ry="10" fill="#f0ede0" stroke="#b0a880" stroke-width="1.5"/>
+        <rect x="6" y="6" width="98" height="142" rx="7" ry="7" fill="url(#greek-key)" opacity="0.8"/>
+        <rect x="12" y="12" width="86" height="130" rx="4" ry="4" fill="#f5f2e2"/>
+        <rect x="12" y="12" width="86" height="130" rx="4" ry="4" fill="none" stroke="#9a9070" stroke-width="1"/>
+        <rect x="14" y="14" width="82" height="126" rx="3" ry="3" fill="none" stroke="#9a9070" stroke-width="0.5"/>
+        <circle cx="55" cy="77" r="32" fill="#eae7d0" stroke="#2a2820" stroke-width="2.5"/>
+        <circle cx="55" cy="77" r="28" fill="none" stroke="#2a2820" stroke-width="0.8"/>
+        <text x="55" y="71" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="13" fill="#1a1810">M</text>
+        <line x1="42" y1="74" x2="68" y2="74" stroke="#1a1810" stroke-width="1.5"/>
+        <text x="55" y="90" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="20" fill="#1a1810">5</text>
+        <text x="55" y="101" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#1a1810">Million</text>
+        <circle cx="20" cy="20" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+        <text x="20" y="17" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+        <text x="20" y="25" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">5</text>
+        <g transform="rotate(180, 90, 134)">
+          <circle cx="90" cy="134" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+          <text x="90" y="131" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+          <text x="90" y="139" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">5</text>
+        </g>
+        <text x="55" y="148" text-anchor="middle" font-family="Arial,sans-serif" font-size="5" fill="#aaa">© 1935, 2008 HASBRO</text>
+      </svg>
+      <div class="card-label">$5M Money</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Property Cards</h3>
+  <p class="subtitle">Thick coloured top band, property name, rent table, ornate border</p>
+  <div class="card-row">
+
+    <!-- Green property -->
+    <div class="card-group">
+      <svg width="110" height="154" viewBox="0 0 110 154" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="106" height="150" rx="10" ry="10" fill="white" stroke="#ddd" stroke-width="1.5"/>
+        <!-- Colored top band clipped to card shape -->
+        <clipPath id="card-clip-g">
+          <rect x="2" y="2" width="106" height="150" rx="10" ry="10"/>
+        </clipPath>
+        <rect x="2" y="2" width="106" height="48" fill="#1a7a3a" clip-path="url(#card-clip-g)"/>
+        <!-- Band label -->
+        <text x="55" y="22" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="rgba(255,255,255,0.8)" letter-spacing="1">PROPERTY</text>
+        <text x="55" y="40" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="14" fill="white">Boardwalk</text>
+
+        <!-- Card body ornate border -->
+        <rect x="6" y="52" width="98" height="96" rx="3" fill="none" stroke="#ccc" stroke-width="1"/>
+        <rect x="8" y="54" width="94" height="92" rx="2" fill="none" stroke="#ccc" stroke-width="0.5"/>
+
+        <!-- Value badge top-left -->
+        <circle cx="18" cy="18" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+        <text x="18" y="15" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+        <text x="18" y="23" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">4</text>
+
+        <!-- Rent table -->
+        <text x="55" y="70" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#333">RENT</text>
+        <line x1="20" y1="73" x2="90" y2="73" stroke="#ccc" stroke-width="0.8"/>
+
+        <text x="25" y="85" font-family="Georgia,serif" font-size="8" fill="#555">1 property:</text>
+        <text x="88" y="85" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#1a7a3a">M1</text>
+
+        <text x="25" y="97" font-family="Georgia,serif" font-size="8" fill="#555">2 properties:</text>
+        <text x="88" y="97" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#1a7a3a">M2</text>
+
+        <text x="25" y="109" font-family="Georgia,serif" font-size="8" fill="#555">Full set:</text>
+        <text x="88" y="109" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#1a7a3a">M4</text>
+
+        <line x1="20" y1="113" x2="90" y2="113" stroke="#ccc" stroke-width="0.8"/>
+
+        <text x="25" y="123" font-family="Georgia,serif" font-size="7" fill="#555">+ House:</text>
+        <text x="88" y="123" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#1a7a3a">M7</text>
+        <text x="25" y="133" font-family="Georgia,serif" font-size="7" fill="#555">+ Hotel:</text>
+        <text x="88" y="133" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#1a7a3a">M8</text>
+
+        <!-- Color label -->
+        <text x="55" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#999">Dark Green</text>
+      </svg>
+      <div class="card-label">Property (Green)</div>
+    </div>
+
+    <!-- Blue property -->
+    <div class="card-group">
+      <svg width="110" height="154" viewBox="0 0 110 154" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="106" height="150" rx="10" ry="10" fill="white" stroke="#ddd" stroke-width="1.5"/>
+        <clipPath id="card-clip-b">
+          <rect x="2" y="2" width="106" height="150" rx="10" ry="10"/>
+        </clipPath>
+        <rect x="2" y="2" width="106" height="48" fill="#1565c0" clip-path="url(#card-clip-b)"/>
+        <text x="55" y="22" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="rgba(255,255,255,0.8)" letter-spacing="1">PROPERTY</text>
+        <text x="55" y="40" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="13" fill="white">Park Place</text>
+        <rect x="6" y="52" width="98" height="96" rx="3" fill="none" stroke="#ccc" stroke-width="1"/>
+        <rect x="8" y="54" width="94" height="92" rx="2" fill="none" stroke="#ccc" stroke-width="0.5"/>
+        <circle cx="18" cy="18" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+        <text x="18" y="15" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+        <text x="18" y="23" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">3</text>
+        <text x="55" y="70" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#333">RENT</text>
+        <line x1="20" y1="73" x2="90" y2="73" stroke="#ccc" stroke-width="0.8"/>
+        <text x="25" y="85" font-family="Georgia,serif" font-size="8" fill="#555">1 property:</text>
+        <text x="88" y="85" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#1565c0">M1</text>
+        <text x="25" y="97" font-family="Georgia,serif" font-size="8" fill="#555">Full set:</text>
+        <text x="88" y="97" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#1565c0">M3</text>
+        <text x="55" y="148" text-anchor="middle" font-family="Georgia,serif" font-size="6" fill="#999">Dark Blue</text>
+      </svg>
+      <div class="card-label">Property (Blue)</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section">
+  <h3>Action Cards</h3>
+  <p class="subtitle">Coloured background, ACTION banner, central circle with card name, description text</p>
+  <div class="card-row">
+
+    <!-- Pass Go -->
+    <div class="card-group">
+      <svg width="110" height="154" viewBox="0 0 110 154" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="106" height="150" rx="10" ry="10" fill="#f0ede0" stroke="#b0a880" stroke-width="1.5"/>
+        <rect x="6" y="6" width="98" height="142" rx="7" ry="7" fill="url(#greek-key)" opacity="0.8"/>
+        <rect x="12" y="12" width="86" height="130" rx="4" ry="4" fill="#f5f2e2"/>
+        <rect x="12" y="12" width="86" height="130" rx="4" ry="4" fill="none" stroke="#9a9070" stroke-width="1"/>
+        <rect x="14" y="14" width="82" height="126" rx="3" ry="3" fill="none" stroke="#9a9070" stroke-width="0.5"/>
+
+        <circle cx="20" cy="20" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+        <text x="20" y="17" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+        <text x="20" y="25" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">1</text>
+
+        <text x="55" y="30" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#2a2820" letter-spacing="0.5">ACTION CARD</text>
+
+        <!-- Central circle -->
+        <circle cx="55" cy="75" r="30" fill="white" stroke="#1a1810" stroke-width="2.5"/>
+        <circle cx="55" cy="75" r="26" fill="none" stroke="#1a1810" stroke-width="0.8"/>
+        <text x="55" y="70" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="12" fill="#1a1810">PASS</text>
+        <text x="55" y="84" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="14" fill="#1a1810">GO</text>
+        <!-- Arrow -->
+        <line x1="35" y1="91" x2="75" y2="91" stroke="#c0392b" stroke-width="3"/>
+        <polygon points="75,87 75,95 82,91" fill="#c0392b"/>
+
+        <text x="55" y="118" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#555">Draw 2 extra cards.</text>
+        <text x="55" y="128" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#555">Play into center to use.</text>
+
+        <g transform="rotate(180, 90, 134)">
+          <circle cx="90" cy="134" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+          <text x="90" y="131" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+          <text x="90" y="139" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">1</text>
+        </g>
+        <text x="55" y="149" text-anchor="middle" font-family="Arial,sans-serif" font-size="5" fill="#aaa">© 1935, 2008 HASBRO</text>
+      </svg>
+      <div class="card-label">Pass Go</div>
+    </div>
+
+    <!-- Deal Breaker (bold style like image 3) -->
+    <div class="card-group">
+      <svg width="110" height="154" viewBox="0 0 110 154" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="106" height="150" rx="10" ry="10" fill="#e53935" stroke="#b71c1c" stroke-width="1.5"/>
+        <!-- Subtle texture lines -->
+        <rect x="6" y="6" width="98" height="142" rx="7" ry="7" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <!-- ACTION banner -->
+        <rect x="2" y="2" width="106" height="34" rx="10" ry="10" fill="#ef5350"/>
+        <rect x="2" y="24" width="106" height="12" fill="#ef5350"/>
+        <text x="55" y="23" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="11" fill="white" letter-spacing="2">ACTION</text>
+
+        <circle cx="18" cy="18" r="11" fill="white" stroke="#b71c1c" stroke-width="2"/>
+        <text x="18" y="15" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#b71c1c">M</text>
+        <text x="18" y="23" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#b71c1c">5</text>
+
+        <!-- Central circle -->
+        <circle cx="55" cy="82" r="32" fill="white" stroke="#7f0000" stroke-width="2.5"/>
+        <text x="55" y="75" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="10" fill="#b71c1c">DEAL</text>
+        <text x="55" y="89" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="10" fill="#b71c1c">BREAKER</text>
+
+        <text x="55" y="126" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="rgba(255,255,255,0.9)">Steal a complete</text>
+        <text x="55" y="136" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="rgba(255,255,255,0.9)">property set.</text>
+      </svg>
+      <div class="card-label">Deal Breaker</div>
+    </div>
+
+    <!-- Wild Property -->
+    <div class="card-group">
+      <svg width="110" height="154" viewBox="0 0 110 154" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="106" height="150" rx="10" ry="10" fill="white" stroke="#ddd" stroke-width="1.5"/>
+        <clipPath id="card-clip-w">
+          <rect x="2" y="2" width="106" height="150" rx="10" ry="10"/>
+        </clipPath>
+        <!-- Top orange band -->
+        <rect x="2" y="2" width="106" height="44" fill="#f57c00" clip-path="url(#card-clip-w)"/>
+        <text x="55" y="19" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="rgba(255,255,255,0.85)" letter-spacing="1">PROPERTY</text>
+        <text x="55" y="36" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="12" fill="white">WILD CARD</text>
+
+        <!-- Bottom pink band -->
+        <rect x="2" y="110" width="106" height="44" fill="#d81b60" clip-path="url(#card-clip-w)"/>
+        <g transform="rotate(180,55,132)">
+          <text x="55" y="119" text-anchor="middle" font-family="Georgia,serif" font-size="8" fill="rgba(255,255,255,0.85)" letter-spacing="1">PROPERTY</text>
+          <text x="55" y="136" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="12" fill="white">WILD CARD</text>
+        </g>
+
+        <!-- Value badge -->
+        <circle cx="18" cy="18" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+        <text x="18" y="15" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+        <text x="18" y="23" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="8" fill="#c0392b">2</text>
+
+        <!-- Body italic note -->
+        <text x="55" y="58" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="7" fill="#666">(Use card either way up)</text>
+
+        <!-- Rent info -->
+        <text x="55" y="72" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#333">RENT</text>
+        <line x1="20" y1="75" x2="90" y2="75" stroke="#ccc" stroke-width="0.8"/>
+        <text x="25" y="85" font-family="Georgia,serif" font-size="8" fill="#555">1:</text>
+        <text x="88" y="85" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#f57c00">M1</text>
+        <text x="25" y="95" font-family="Georgia,serif" font-size="8" fill="#555">2:</text>
+        <text x="88" y="95" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#f57c00">M2</text>
+        <text x="25" y="105" font-family="Georgia,serif" font-size="8" fill="#555">Full set:</text>
+        <text x="88" y="105" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#f57c00">M4</text>
+      </svg>
+      <div class="card-label">Wild Property</div>
+    </div>
+
+  </div>
+</div>
+
+<p class="subtitle">Does this feel right? Let me know in the terminal what to adjust before I move to the board chrome design.</p>

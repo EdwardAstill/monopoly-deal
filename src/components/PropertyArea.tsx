@@ -72,7 +72,7 @@ export default function PropertyArea({
         const hasNatural = set.cards.some((c: Card) => c.type === 'property')
         const complete = set.cards.length >= required && hasNatural
         const rent = getRentAmount(set)
-        const canPlace = validPlacements?.includes(set.color) ?? false
+        const canPlace = !complete && (validPlacements?.includes(set.color) ?? false)
 
         let borderStyle: string
         let bgColor: string

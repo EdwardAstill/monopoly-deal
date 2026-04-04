@@ -1,0 +1,169 @@
+<h2>Property Card — Simplified</h2>
+<p class="subtitle">Cleaner design. Badge tucked into corner, no overlap. Tell me what to adjust.</p>
+
+<style>
+  .card-row { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; margin: 20px 0; }
+  .card-label { text-align: center; font-size: 12px; color: #aaa; margin-top: 8px; }
+  .card-group { display: flex; flex-direction: column; align-items: center; }
+</style>
+
+<div class="card-row">
+
+  <!-- Green (Dark Green) -->
+  <div class="card-group">
+    <svg width="120" height="168" viewBox="0 0 120 168" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="cc-g"><rect x="2" y="2" width="116" height="164" rx="11" ry="11"/></clipPath>
+      </defs>
+      <!-- Card base -->
+      <rect x="2" y="2" width="116" height="164" rx="11" ry="11" fill="white" stroke="#ccc" stroke-width="1.5"/>
+
+      <!-- Coloured top band -->
+      <rect x="2" y="2" width="116" height="52" fill="#1a7a3a" clip-path="url(#cc-g)"/>
+
+      <!-- Value badge — top right, in band -->
+      <circle cx="100" cy="18" r="13" fill="white" stroke="#c0392b" stroke-width="2.5"/>
+      <text x="100" y="14" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#c0392b">M</text>
+      <text x="100" y="26" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="11" fill="#c0392b">4</text>
+
+      <!-- Band text (left side, clear of badge) -->
+      <text x="14" y="21" font-family="Georgia,serif" font-size="8" fill="rgba(255,255,255,0.8)" letter-spacing="1.5">PROPERTY</text>
+      <text x="14" y="44" font-family="Georgia,serif" font-weight="900" font-size="16" fill="white">Boardwalk</text>
+
+      <!-- Inset border on body -->
+      <rect x="8" y="56" width="104" height="106" rx="4" ry="4" fill="none" stroke="#ddd" stroke-width="1"/>
+
+      <!-- RENT heading -->
+      <text x="60" y="74" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#333" letter-spacing="1">RENT</text>
+      <line x1="14" y1="78" x2="106" y2="78" stroke="#ddd" stroke-width="1"/>
+
+      <!-- Rent rows -->
+      <text x="18" y="91" font-family="Georgia,serif" font-size="9" fill="#666">1 card</text>
+      <text x="102" y="91" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#1a7a3a">M1</text>
+
+      <text x="18" y="104" font-family="Georgia,serif" font-size="9" fill="#666">2 cards</text>
+      <text x="102" y="104" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#1a7a3a">M2</text>
+
+      <text x="18" y="117" font-family="Georgia,serif" font-size="9" fill="#666">Full set</text>
+      <text x="102" y="117" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#1a7a3a">M4</text>
+
+      <line x1="14" y1="121" x2="106" y2="121" stroke="#ddd" stroke-width="0.8" stroke-dasharray="3,2"/>
+
+      <text x="18" y="133" font-family="Georgia,serif" font-size="8" fill="#888">+ House</text>
+      <text x="102" y="133" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#1a7a3a">M7</text>
+
+      <text x="18" y="145" font-family="Georgia,serif" font-size="8" fill="#888">+ Hotel</text>
+      <text x="102" y="145" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#1a7a3a">M8</text>
+
+      <!-- Color label -->
+      <text x="60" y="160" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#bbb">Dark Green</text>
+    </svg>
+    <div class="card-label">Dark Green</div>
+  </div>
+
+  <!-- Orange (2-card set) -->
+  <div class="card-group">
+    <svg width="120" height="168" viewBox="0 0 120 168" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="cc-o"><rect x="2" y="2" width="116" height="164" rx="11" ry="11"/></clipPath>
+      </defs>
+      <rect x="2" y="2" width="116" height="164" rx="11" ry="11" fill="white" stroke="#ccc" stroke-width="1.5"/>
+      <rect x="2" y="2" width="116" height="52" fill="#e65100" clip-path="url(#cc-o)"/>
+      <circle cx="100" cy="18" r="13" fill="white" stroke="#c0392b" stroke-width="2.5"/>
+      <text x="100" y="14" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#c0392b">M</text>
+      <text x="100" y="26" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="11" fill="#c0392b">2</text>
+      <text x="14" y="21" font-family="Georgia,serif" font-size="8" fill="rgba(255,255,255,0.8)" letter-spacing="1.5">PROPERTY</text>
+      <text x="14" y="44" font-family="Georgia,serif" font-weight="900" font-size="16" fill="white">St. James</text>
+      <rect x="8" y="56" width="104" height="106" rx="4" ry="4" fill="none" stroke="#ddd" stroke-width="1"/>
+      <text x="60" y="74" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#333" letter-spacing="1">RENT</text>
+      <line x1="14" y1="78" x2="106" y2="78" stroke="#ddd" stroke-width="1"/>
+      <text x="18" y="91" font-family="Georgia,serif" font-size="9" fill="#666">1 card</text>
+      <text x="102" y="91" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#e65100">M1</text>
+      <text x="18" y="104" font-family="Georgia,serif" font-size="9" fill="#666">2 cards</text>
+      <text x="102" y="104" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#e65100">M2</text>
+      <text x="18" y="117" font-family="Georgia,serif" font-size="9" fill="#666">Full set (3)</text>
+      <text x="102" y="117" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="9" fill="#e65100">M3</text>
+      <line x1="14" y1="121" x2="106" y2="121" stroke="#ddd" stroke-width="0.8" stroke-dasharray="3,2"/>
+      <text x="18" y="133" font-family="Georgia,serif" font-size="8" fill="#888">+ House</text>
+      <text x="102" y="133" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#e65100">M4</text>
+      <text x="18" y="145" font-family="Georgia,serif" font-size="8" fill="#888">+ Hotel</text>
+      <text x="102" y="145" text-anchor="end" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#e65100">M5</text>
+      <text x="60" y="160" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#bbb">Orange</text>
+    </svg>
+    <div class="card-label">Orange</div>
+  </div>
+
+  <!-- Wild Property card — fixed rent table -->
+  <div class="card-group">
+    <svg width="120" height="168" viewBox="0 0 120 168" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="cc-w"><rect x="2" y="2" width="116" height="164" rx="11" ry="11"/></clipPath>
+      </defs>
+      <rect x="2" y="2" width="116" height="164" rx="11" ry="11" fill="white" stroke="#ccc" stroke-width="1.5"/>
+
+      <!-- Top orange band -->
+      <rect x="2" y="2" width="116" height="44" fill="#f57c00" clip-path="url(#cc-w)"/>
+      <!-- Bottom pink band -->
+      <rect x="2" y="124" width="116" height="44" fill="#d81b60" clip-path="url(#cc-w)"/>
+
+      <!-- Value badge — centre of top band so it doesn't clash -->
+      <circle cx="60" cy="14" r="11" fill="white" stroke="#c0392b" stroke-width="2"/>
+      <text x="60" y="11" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="#c0392b">M</text>
+      <text x="60" y="21" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="9" fill="#c0392b">2</text>
+
+      <!-- Top band labels either side of badge -->
+      <text x="14" y="35" font-family="Georgia,serif" font-size="7" fill="rgba(255,255,255,0.85)" letter-spacing="1">PROPERTY</text>
+      <text x="14" y="44" font-family="Georgia,serif" font-weight="900" font-size="10" fill="white">WILD CARD</text>
+
+      <!-- Bottom band (upside-down mirror) -->
+      <g transform="rotate(180,60,136)">
+        <text x="14" y="119" font-family="Georgia,serif" font-size="7" fill="rgba(255,255,255,0.85)" letter-spacing="1">PROPERTY</text>
+        <text x="14" y="128" font-family="Georgia,serif" font-weight="900" font-size="10" fill="white">WILD CARD</text>
+      </g>
+
+      <!-- Italic note -->
+      <text x="60" y="56" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="7" fill="#888">(Use card either way up)</text>
+
+      <!-- Rent table: colours as columns, rows = card count -->
+      <!-- Header -->
+      <line x1="10" y1="61" x2="110" y2="61" stroke="#ddd" stroke-width="1"/>
+      <text x="60" y="58" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#333">RENT</text>
+
+      <!-- Column headers -->
+      <rect x="52" y="63" width="26" height="10" rx="2" fill="#f57c00"/>
+      <text x="65" y="71" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="white">Orange</text>
+      <rect x="82" y="63" width="26" height="10" rx="2" fill="#d81b60"/>
+      <text x="95" y="71" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7" fill="white">Pink</text>
+
+      <!-- Row divider -->
+      <line x1="10" y1="75" x2="110" y2="75" stroke="#eee" stroke-width="0.8"/>
+
+      <!-- Rows -->
+      <text x="14" y="84" font-family="Georgia,serif" font-size="8" fill="#666">1 card</text>
+      <text x="65" y="84" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#f57c00">M1</text>
+      <text x="95" y="84" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#d81b60">M1</text>
+
+      <text x="14" y="94" font-family="Georgia,serif" font-size="8" fill="#666">2 cards</text>
+      <text x="65" y="94" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#f57c00">M2</text>
+      <text x="95" y="94" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#d81b60">M2</text>
+
+      <text x="14" y="104" font-family="Georgia,serif" font-size="8" fill="#666">Full set</text>
+      <text x="65" y="104" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#f57c00">M3</text>
+      <text x="95" y="104" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="8" fill="#d81b60">M4</text>
+
+      <line x1="10" y1="107" x2="110" y2="107" stroke="#eee" stroke-width="0.8" stroke-dasharray="3,2"/>
+
+      <text x="14" y="116" font-family="Georgia,serif" font-size="7.5" fill="#888">+ House</text>
+      <text x="65" y="116" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7.5" fill="#f57c00">M4</text>
+      <text x="95" y="116" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7.5" fill="#d81b60">M5</text>
+
+      <text x="14" y="123" font-family="Georgia,serif" font-size="7.5" fill="#888">+ Hotel</text>
+      <text x="65" y="123" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7.5" fill="#f57c00">M5</text>
+      <text x="95" y="123" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="7.5" fill="#d81b60">M6</text>
+    </svg>
+    <div class="card-label">Wild Property</div>
+  </div>
+
+</div>
+
+<p class="subtitle">Happy with property &amp; wild cards? Say so and we'll move to money cards next.</p>

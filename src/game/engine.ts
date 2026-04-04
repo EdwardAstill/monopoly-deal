@@ -226,7 +226,7 @@ function applyMoveWild(state: GameState, action: MoveWildAction): GameState {
   const players = clonePlayers(state.players)
   const { card, properties } = removePropertyCard(players[cp].properties, action.cardId)
   if (card.type !== 'wild_property') throw new Error('Not a wild property card')
-  players[cp].properties = addPropertyToSet(properties, card, action.targetColor)
+  players[cp].properties = addToPropertySet(properties, card, action.targetColor)
   const log = [...state.log, {
     player: cp,
     message: `Moved wild card to ${colorLabel(action.targetColor)}`,
@@ -619,8 +619,9 @@ function resolveAccept(
         // Try properties
         const { card, properties } = removePropertyCard(players[tgt].properties, pid)
         players[tgt].properties = properties
-        // Payment cards go to source's bank
-        players[src].bank.push(card as unknown as Card)
+        // Property cards go to source's property area
+        const color = card.type === 'property' ? card.color : (card as WildPropertyCard).colors[0]
+        players[src].properties = addToPropertySet(players[src].properties, card, color)
         continue
       }
       break
