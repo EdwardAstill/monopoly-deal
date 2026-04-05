@@ -149,7 +149,8 @@ export function performDraw(state: GameState): GameState {
   const s = ensureDeck(state)
   const cp = s.currentPlayer
   // Official rule: if hand is empty at start of turn, draw 5 instead of 2
-  const drawCount = s.players[cp].hand.length === 0 ? 5 : 2
+  const baseCount = s.players[cp].hand.length === 0 ? 5 : 2
+  const drawCount = Math.min(baseCount, Math.max(0, 7 - s.players[cp].hand.length))
   const result = drawCards(s.deck, s.discardPile, drawCount)
   const players = clonePlayers(s.players)
   players[cp].hand.push(...result.drawn)
@@ -366,7 +367,8 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
 
   switch (actionCard.name) {
     case 'passGo': {
-      const drawResult = drawCards(newDeck, newDiscardForDraw, 2)
+      const toDraw = Math.min(2, Math.max(0, 7 - players[cp].hand.length))
+      const drawResult = drawCards(newDeck, newDiscardForDraw, toDraw)
       players[cp].hand.push(...drawResult.drawn)
       const next: GameState = {
         ...state,
@@ -374,7 +376,7 @@ function applyPlayAction(state: GameState, action: PlayActionAction): GameState 
         discardPile: drawResult.discardPile,
         players,
         actionsRemaining,
-        log: [...state.log, { player: cp, message: `Played Pass Go — drew 2 cards` }],
+        log: [...state.log, { player: cp, message: `Played Pass Go — drew ${toDraw} card${toDraw !== 1 ? 's' : ''}` }],
       }
       return maybeEndTurn(next)
     }

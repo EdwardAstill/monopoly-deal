@@ -343,6 +343,28 @@ describe('applyAction - passGo', () => {
     const g2 = applyAction(g, { type: 'playAction', cardId: ac.id })
     expect(g2.actionsRemaining).toBe(2)
   })
+
+  it('caps draw at 7-card hand limit when holding 7', () => {
+    const ac = makeAction('passGo')
+    const g = makeState({ deck: [makeMoney(1), makeMoney(2), makeMoney(3)] })
+    // 7 cards in hand (including Pass Go) — after playing it: 6 left, draw only 1 to reach 7
+    g.players[0].hand = [ac, makeMoney(1), makeMoney(1), makeMoney(1), makeMoney(1), makeMoney(1), makeMoney(1)]
+    const g2 = applyAction(g, { type: 'playAction', cardId: ac.id })
+    expect(g2.players[0].hand).toHaveLength(7)
+  })
+
+  it('draws 0 cards when hand is already full after playing', () => {
+    const ac = makeAction('passGo')
+    const g = makeState({ deck: [makeMoney(1), makeMoney(2), makeMoney(3)] })
+    // 8 cards in hand (Pass Go + 7 others) — after playing: 7 left, draw 0
+    g.players[0].hand = [
+      ac,
+      makeMoney(1), makeMoney(1), makeMoney(1), makeMoney(1),
+      makeMoney(1), makeMoney(1), makeMoney(1),
+    ]
+    const g2 = applyAction(g, { type: 'playAction', cardId: ac.id })
+    expect(g2.players[0].hand).toHaveLength(7)
+  })
 })
 
 // ── Debt Collector ────────────────────────────────────────────────────────────
