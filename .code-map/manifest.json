@@ -1,0 +1,113 @@
+{
+  "files": {
+    "src/components/ActionButtons.tsx": {
+      "content_hash": "7415880958421f8987c40621cc4dcbaf11986919198534c408967d0b39479218",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/ActionLog.tsx": {
+      "content_hash": "7fa5b12b555239709462cb7d3163fc4b07801c983a04875ca42e13eb64e98c7d",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/App.tsx": {
+      "content_hash": "3c587736e2fa6056596350033b8760cdaefd201d6bbd0a8191ae9058730ddb0a",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/Bank.tsx": {
+      "content_hash": "6ae850e11be15f6d9f7a56c3735d65cd6c7a0dff1efb7a9065c5eda6d24b90b5",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/Board.tsx": {
+      "content_hash": "1b992b00910ecad8768a7f61a3973fc58e7e4127097c44513800fc9a398ef76c",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/CardView.tsx": {
+      "content_hash": "e891f5960d96d0eadc1af48fdd961ce43f4cdc027ed8bbf1faba01e7ff82fce5",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/Hand.tsx": {
+      "content_hash": "16b72e4210afe180414994d4b1d3113bb4262c17b04975b3fd805849a047fb6d",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/OpponentView.tsx": {
+      "content_hash": "279617e46759ccb867dcaf77979f31848e4476050e03c71f9b93f20ce219650b",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/PropertyArea.tsx": {
+      "content_hash": "2489b8a63dafcf348c795025647972082109afb12617fdb8a371f0e4d9af0786",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/components/theme.ts": {
+      "content_hash": "db746005a1623ff2d61e3abb0b0dca9b16962979de3758f19c8778583f940c2a",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/game/ai.ts": {
+      "content_hash": "bf625ee6e328505504f35655dc0c4b27a4a208fe6c378bd5286cb5a9a22409be",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/game/constants.ts": {
+      "content_hash": "2527b6598be9288f3eb75faea88459a399f157bce2a273730911caa338157558",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/game/deck.ts": {
+      "content_hash": "c8bb448e26405bf2373eb1d07295306e3b029e782a96126dfe7b2fe638c213e1",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/game/engine.ts": {
+      "content_hash": "1c61a03c506064ede1e24e52c9fd2e58f8d5961937e5c6453da2c53bdbca2174",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/game/types.ts": {
+      "content_hash": "4b37d229cac7e9093c9899009a1f0a8663a74689aad240d4fe5012b86862bb41",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/hooks/useGame.ts": {
+      "content_hash": "3aa48447f6f048c525ff2801cb0fe9689ecfd5f1c09be013710933cf6c40b0bd",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/main.tsx": {
+      "content_hash": "ccc534493b6416dc44ed4954d5795ce0801a608a257480b9ad1719dde3f71471",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "src/vite-env.d.ts": {
+      "content_hash": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "tests/game/ai.test.ts": {
+      "content_hash": "3ecba1813add49037f5d5dc72b55a08652819902943682d87f71ee8cdb33e708",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "tests/game/constants.test.ts": {
+      "content_hash": "42d9ce358ef7b36511907495e446650427f36c06f38371bdcffa92a862210c60",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "tests/game/deck.test.ts": {
+      "content_hash": "a179556d3f86e77dd47f3dd47354647805c3822f24a0aa6a568afbe67f35d5b1",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "tests/game/engine.test.ts": {
+      "content_hash": "4fba1b6b2c43f9782eb29d829e5b85c0e323c4c672674dc73a5ccfb2c4d54e12",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "tests/game/integration.test.ts": {
+      "content_hash": "0d0aa2ef367bdf650457f21c94e979d459343baa04edafc94948fe47e7b51387",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    },
+    "vite.config.ts": {
+      "content_hash": "a7681896e20e97deb69d9b28d33940e259a916cc98ff42c911f4ee7145ca7597",
+      "last_indexed": "2026-05-07T10:49:24+00:00"
+    }
+  },
+  "grammar_versions": {
+    "javascript": "unknown",
+    "python": "unknown",
+    "rust": "unknown",
+    "typescript": "unknown"
+  },
+  "languages": [
+    "python",
+    "typescript",
+    "javascript",
+    "rust"
+  ],
+  "last_built": "2026-05-07T10:49:24+00:00"
+}
